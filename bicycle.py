@@ -14,37 +14,43 @@ class Bicycle(object):
     """
     Represents a bicycle.
     """
-    def __init__(self, head_tube_angle=None, 
+    def __init__(self, name=None, head_tube_angle=None, 
       fork_rake=None, crank_length=None,
-      front_sprockets=[], rear_sprockets=[], rim_diameter=None, erd=None,
-      tire_width=None, wheel_radius=None,
-      center_to_flange={'left':None,'right':None},
-      flange_diameter={'left':None,'right':None},
-      spoke_hole_diameter=2.6, spokes=None, crosses=None, offset=0):
+      front_cogs=None, rear_cogs=None, rim_diameter=None, erd=None,
+      tire_width=None, wheel_diameter=None,
+      center_to_flange=None, flange_diameter=None,
+      spoke_hole_diameter=2.6, num_spokes=None, num_crosses=None, offset=0):
+        self.name = name
         self.head_tube_angle = head_tube_angle
         self.fork_rake = fork_rake
         self.crank_length = crank_length
-        self.front_sprockets = front_sprockets  # e.g. [46,36]
-        self.rear_sprockets = rear_sprockets    # e.g. [12,14,16,18,20]
+        self.front_cogs = sorted(front_cogs)  # e.g. [46, 36]
+        self.rear_cogs = sorted(rear_cogs)    # e.g. [12, 14, 16, 18, 20]
         self.rim_diameter = rim_diameter
         self.erd = erd
         self.tire_width = tire_width
-        self.wheel_radius = wheel_radius
-        self.center_to_flange = center_to_flange    # e.g. {'left':45,'right:20}
-        self.flange_diameter = flange_diameter  # e.g. {'left':45,'right:45}
+        self.wheel_diameter = wheel_diameter
+        if center_to_flange is None:
+            self.center_to_flange = {'left': None, 'right':None}
+        else:
+            self.center_to_flange = center_to_flange  
+        if flange_diameter is None:
+            self.flange_diameter = {'left': None, 'right':None}
+        else:
+            self.flange_diameter = flange_diameter  
         self.spoke_hole_diameter = spoke_hole_diameter
-        self.spokes = spokes
-        self.crosses = crosses
+        self.num_spokes = num_spokes
+        self.num_crosses = num_crosses
         self.offset = offset
     
-    def __str__(self):
-        s = "specs\n"
-        s += "-----\n"
+    def __repr__(self):
+        s = self.name + '\n'
+        s += '-'*len(self.name) + '\n'
         for (k, v) in sorted(self.__dict__.items()):
-            s += "%s = %s\n" % (k, v)
+            s += '{!s} = {!s}\n'.format(k, v)
         return s
         
-    def cadence(self, speed, digits=1):
+    def speed_to_cadences(self, speed, digits=1):
         """
         Return cadences in revolutions/minute. 
         Speed is measured in km/hour.
@@ -59,12 +65,12 @@ class Bicycle(object):
 
     def derailer_capacity(self):
         """
-        Return the derailer capacity needed for this bike's sprocketset.
+        Return the derailer capacity needed for this bike's cogset.
         """
-        return abs(self.front_sprockets[0] - self.front_sprockets[-1]) + \
-        abs(self.rear_sprockets[0] - self.rear_sprockets[0])
+        return abs(self.front_cogs[0] - self.front_cogs[-1]) + \
+        abs(self.rear_cogs[0] - self.rear_cogs[0])
 
-    def gain_ratio(self, digits=1):
+    def gain_ratios(self, digits=1):
         """
         Return the gain ratios.
         For an explanation and calculator, respectively, see
@@ -74,24 +80,16 @@ class Bicycle(object):
         rolling surface of the tire.
         """
         result = {}
-        w = self.wheel_radius/self.crank_length
-        for (f, r) in product(self.front_sprockets, self.rear_sprockets):
+        w = self.wheel_diameter/2/self.crank_length
+        for (f, r) in product(self.front_cogs, self.rear_cogs):
             temp = w*f/r
             result[(f, r)] = round(temp, digits)
         return result
-    
-    def mechanical_advantage(self):
-        """
-        Return the mechanical advantage of this bike's cantilever brake.
-        See
-        http://www.circleacycles.com/cantilevers/
-        """
-        pass    
-    
+        
     def skid_patches(self, ambidextrous=False):
         """
         For each pair of front and rear sprocket combinations (f, r) of in
-        this bike's sprocketset, compute the number of skid patches made on the 
+        this bike's cogset, compute the number of skid patches made on the 
         rear tire of a fixed gear bike with front sprocket f and rear sprocket r.
         Let a and b denote the numerator and denominator of the fraction
         f/r in lowest terms.
@@ -100,7 +98,7 @@ class Bicycle(object):
         and a is odd, then the number of skid patches is 2*b.
         """
         result = {}
-        for (f, r) in product(self.front_sprockets, self.rear_sprockets):
+        for (f, r) in product(self.front_cogs, self.rear_cogs):
             g = gcd(f, r)
             a = f/g
             b = r/g
@@ -110,9 +108,10 @@ class Bicycle(object):
                 result[(f, r)] = b
         return result
 
-    def speed(self, cadence, digits=1):
+    def cadence_to_speeds(self, cadence, digits=1):
         """
-        Return speeds in km/hour. Cadence is measured in revolutions/minute.
+        Return speeds in km/hour. 
+        Cadence is measured in revolutions/minute.
         """
         gr = self.gain_ratio()
         cl = self.crank_length
@@ -128,7 +127,7 @@ class Bicycle(object):
         for this bike's wheel.
         """
         result = {}
-        for k in self.center_to_flange.keys():
+        for k in self.center_to_flange:
             if k == 'right':
                 o = self.offset
             else:
@@ -137,7 +136,7 @@ class Bicycle(object):
             r1 = self.flange_diameter[k]/2
             r2 = self.erd/2
             r3 = self.spoke_hole_diameter/2
-            a = 2*pi*self.crosses/(self.spokes/2)
+            a = 2*pi*self.num_crosses/(self.num_spokes/2)
             temp = sqrt(d**2 + r1**2 + r2**2 - 2*r1*r2*cos(a)) - r3
             result[k] = round(temp, digits)
         return result
@@ -152,16 +151,16 @@ class Bicycle(object):
         rolling surface of the tire.
         """
         a = radians(self.head_tube_angle)
-        trail =  (self.wheel_radius*cos(a) - self.fork_rake)/sin(a)
+        trail = ((self.wheel_diameter/2)*cos(a) - self.fork_rake)/sin(a)
         mechanical_trail = trail*sin(a)
         wheel_flop = trail*sin(a)*cos(a)
         result = (trail, mechanical_trail, wheel_flop)
         return [round(x, digits) for x in result]
 
-    def wheel_radius_approx(self):
+    def wheel_diameter_approx(self):
         """
         Return the approximate wheel radius.
         The rim diameter is the bead seat diameter and not the effective
         rim diameter (ERD).
         """
-        return int(self.rim_diameter/2 + self.tire_width)
+        return int(self.rim_diameter + 2*self.tire_width)
