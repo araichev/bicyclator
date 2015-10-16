@@ -1,14 +1,17 @@
-# All lengths are measured in mm unless noted otherwise.
-#
-# Eventually make it so that user inputs more common measurements,
-# such as rim diameter and tire width.
-#
-# See http://en.wikipedia.org/wiki/Bicycle_gearing#Gear_ratio_calculators
-# for good UI features for calculators.
-# Good UI at http://www.bikecalc.com/.
 from math import *
 from fractions import gcd
 from itertools import product
+
+"""
+All lengths are measured in mm unless noted otherwise.
+
+Eventually make it so that user inputs more common measurements,
+such as rim diameter and tire width.
+
+See http://en.wikipedia.org/wiki/Bicycle_gearing#Gear_ratio_calculators
+for good UI features for calculators.
+Good UI at http://www.bikecalc.com/.
+"""
 
 class Bicycle(object):
     """
@@ -16,36 +19,21 @@ class Bicycle(object):
     """
     def __init__(self, name=None, head_tube_angle=None, 
       fork_rake=None, crank_length=None,
-      front_cogs=None, rear_cogs=None, rim_diameter=None, erd=None,
-      tire_width=None, wheel_diameter=None,
-      center_to_flange=None, flange_diameter=None,
-      spoke_hole_diameter=2.6, num_spokes=None, num_crosses=None, offset=0):
+      front_cogs=None, rear_cogs=None, 
+      wheels=None):
         self.name = name
         self.head_tube_angle = head_tube_angle
         self.fork_rake = fork_rake
         self.crank_length = crank_length
         self.front_cogs = sorted(front_cogs)  # e.g. [46, 36]
         self.rear_cogs = sorted(rear_cogs)    # e.g. [12, 14, 16, 18, 20]
-        self.rim_diameter = rim_diameter
-        self.erd = erd
-        self.tire_width = tire_width
-        self.wheel_diameter = wheel_diameter
-        if center_to_flange is None:
-            self.center_to_flange = {'left': None, 'right':None}
-        else:
-            self.center_to_flange = center_to_flange  
-        if flange_diameter is None:
-            self.flange_diameter = {'left': None, 'right':None}
-        else:
-            self.flange_diameter = flange_diameter  
-        self.spoke_hole_diameter = spoke_hole_diameter
-        self.num_spokes = num_spokes
-        self.num_crosses = num_crosses
-        self.offset = offset
+        if wheels is None:
+            wheels = {'front': None, 'rear': None}
+        self.wheels = wheels
     
     def __repr__(self):
         s = self.name + '\n'
-        s += '-'*len(self.name) + '\n'
+        s += '='*len(self.name) + '\n'
         for (k, v) in sorted(self.__dict__.items()):
             s += '{!s} = {!s}\n'.format(k, v)
         return s
@@ -80,7 +68,8 @@ class Bicycle(object):
         rolling surface of the tire.
         """
         result = {}
-        w = self.wheel_diameter/2/self.crank_length
+        wheel_radius = self.wheels['front'].diameter/2
+        w = wheel_radius/self.crank_length
         for (f, r) in product(self.front_cogs, self.rear_cogs):
             temp = w*f/r
             result[(f, r)] = round(temp, digits)
@@ -120,7 +109,56 @@ class Bicycle(object):
             temp = g*2*pi*cl*cadence*(60.0/1000000)
             result[k] = round(temp, digits)
         return result
-    
+        
+    def trail(self, digits=1): 
+        """
+        Return this bike's trail, mechanical trail, and wheel flop.
+        For an explanation and calculator, respectively, see
+        http://en.wikipedia.org/wiki/Bicycle_and_motorcycle_geometry#Trail
+        http://yojimg.net/bike/web_tools/trailcalc.php.
+        The wheel radius is the distance from the center of the hub to the
+        rolling surface of the tire.
+        """
+        a = radians(self.head_tube_angle)
+        wheel_radius = self.wheels['front'].diameter/2
+        trail = (wheel_radius*cos(a) - self.fork_rake)/sin(a)
+        mechanical_trail = trail*sin(a)
+        wheel_flop = trail*sin(a)*cos(a)
+        result = (trail, mechanical_trail, wheel_flop)
+        return [round(x, digits) for x in result]
+
+
+class Wheel(object):
+    """
+    Represents a bicycle wheel
+    """
+    def __init__(self, name=None, rim_diameter=None, 
+      erd=None, tire_width=None, diameter=None,
+      center_to_flange=None, flange_diameter=None,
+      spoke_hole_diameter=2.6, num_spokes=None, num_crosses=None, offset=0):
+        self.name = name
+        self.erd = erd
+        self.tire_width = tire_width
+        self.rim_diameter = rim_diameter
+        self.diameter = diameter
+        if center_to_flange is None:
+            center_to_flange = {'left': None, 'right':None}
+        self.center_to_flange = center_to_flange  
+        if flange_diameter is None:
+            flange_diameter = {'left': None, 'right':None}
+        self.flange_diameter = flange_diameter  
+        self.spoke_hole_diameter = spoke_hole_diameter
+        self.num_spokes = num_spokes
+        self.num_crosses = num_crosses
+        self.offset = offset
+
+    def __repr__(self):
+        s = self.name + '\n'
+        s += '-'*len(self.name) + '\n'
+        for (k, v) in sorted(self.__dict__.items()):
+            s += '{!s} = {!s}\n'.format(k, v)
+        return s
+
     def spoke_length(self, digits=1):
         """
         Return the left (nondrive side) and right (drive side) spoke lengths
@@ -140,24 +178,8 @@ class Bicycle(object):
             temp = sqrt(d**2 + r1**2 + r2**2 - 2*r1*r2*cos(a)) - r3
             result[k] = round(temp, digits)
         return result
-    
-    def trail(self, digits=1): 
-        """
-        Return this bike's trail, mechanical trail, and wheel flop.
-        For an explanation and calculator, respectively, see
-        http://en.wikipedia.org/wiki/Bicycle_and_motorcycle_geometry#Trail
-        http://yojimg.net/bike/web_tools/trailcalc.php.
-        The wheel radius is the distance from the center of the hub to the
-        rolling surface of the tire.
-        """
-        a = radians(self.head_tube_angle)
-        trail = ((self.wheel_diameter/2)*cos(a) - self.fork_rake)/sin(a)
-        mechanical_trail = trail*sin(a)
-        wheel_flop = trail*sin(a)*cos(a)
-        result = (trail, mechanical_trail, wheel_flop)
-        return [round(x, digits) for x in result]
 
-    def wheel_diameter_approx(self):
+    def approx_diameter(self):
         """
         Return the approximate wheel radius.
         The rim diameter is the bead seat diameter and not the effective
