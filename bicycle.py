@@ -1,3 +1,4 @@
+import functools
 from math import *
 from fractions import gcd
 from itertools import product
@@ -13,22 +14,75 @@ for good UI features for calculators.
 Good UI at http://www.bikecalc.com/.
 """
 
+def gain_ratios(crank_length, cogs, wheel_diameter, digits=1):
+    """
+    Return the gain ratios for the given parameters.
+    For an explanation and calculator, respectively, see
+    http://en.wikipedia.org/wiki/Bicycle_gearing#Measuring_gear_ratios
+    http://sheldonbrown.com/gain.html.
+    The wheel diameter is the diameter of the wheel with the tire on and
+    inflated.
+    """
+    result = {}
+    w = wheel_diameter/2/crank_length
+    for (f, r) in product(cogs['front'], cogs['rear']):
+        temp = w*f/r
+        result[(f, r)] = round(temp, digits)
+    return result
+
+def speed_to_cadences(speed, crank_length, cogs, wheel_diameter, digits=1):
+    """
+    Return cadences in revolutions/minute. 
+    Speed is measured in km/hour.
+    """
+    gr = gain_ratios(crank_length, cogs, wheel_diameter)
+    cl = crank_length
+    result = {}
+    for (k, g) in gr.items():
+        temp = speed/(g*2*pi*cl)*(1000000/60)
+        result[k] = round(temp, digits)
+    return result
+
+def cadence_to_speeds(cadence, crank_length, cogs, wheel_diameter, digits=1):
+    """
+    Return speeds in km/hour. 
+    Cadence is measured in revolutions/minute.
+    """
+    gr = gain_ratios(crank_length, cogs, wheel_diameter)
+    cl = crank_length
+    result = {}
+    for (k, g) in gr.items():
+        temp = g*2*pi*cl*cadence*(60/1000000)
+        result[k] = round(temp, digits)
+    return result
+
+def derailer_capacity(cogs):
+    """
+    Return the derailer capacity needed to accommodate the given cog set.
+    """
+    return abs(cogs['front'][-1] - cogs['front'][0]) + \
+      abs(cogs['rear'][-1] - cogs['rear'][0])
+
+
 class Bicycle(object):
     """
     Represents a bicycle.
     """
     def __init__(self, name=None, head_tube_angle=None, 
       fork_rake=None, crank_length=None,
-      front_cogs=None, rear_cogs=None, 
-      wheels=None):
+      cogs=None, wheels=None):
         self.name = name
         self.head_tube_angle = head_tube_angle
         self.fork_rake = fork_rake
         self.crank_length = crank_length
-        self.front_cogs = sorted(front_cogs)  # e.g. [46, 36]
-        self.rear_cogs = sorted(rear_cogs)    # e.g. [12, 14, 16, 18, 20]
+        if cogs is None:
+            cogs = {'front': [], 'rear': []}
+        self.cogs = {
+          'front': sorted(cogs['front']), 
+          'rear': sorted(cogs['rear']),
+          }
         if wheels is None:
-            wheels = {'front': None, 'rear': None}
+            wheels = {'front': Wheel(), 'rear': Wheel()}
         self.wheels = wheels
     
     def __repr__(self):
@@ -37,49 +91,45 @@ class Bicycle(object):
         for (k, v) in sorted(self.__dict__.items()):
             s += '{!s} = {!s}\n'.format(k, v)
         return s
-        
-    def speed_to_cadences(self, speed, digits=1):
-        """
-        Return cadences in revolutions/minute. 
-        Speed is measured in km/hour.
-        """
-        gr = self.gain_ratio()
-        cl = self.crank_length
-        result = {}
-        for (k, g) in gr.items():
-            temp = speed/(g*2*pi*cl)*(1000000/60.0)
-            result[k] = round(temp, digits)
-        return result
 
     def derailer_capacity(self):
-        """
-        Return the derailer capacity needed for this bike's cogset.
-        """
-        return abs(self.front_cogs[0] - self.front_cogs[-1]) + \
-        abs(self.rear_cogs[0] - self.rear_cogs[0])
+        return derailer_capacity(self.cogs)
 
     def gain_ratios(self, digits=1):
-        """
-        Return the gain ratios.
-        For an explanation and calculator, respectively, see
-        http://en.wikipedia.org/wiki/Bicycle_gearing#Measuring_gear_ratios
-        http://sheldonbrown.com/gain.html.
-        The wheel radius is the distance from the center of the hub to the
-        rolling surface of the tire.
-        """
-        result = {}
-        wheel_radius = self.wheels['front'].diameter/2
-        w = wheel_radius/self.crank_length
-        for (f, r) in product(self.front_cogs, self.rear_cogs):
-            temp = w*f/r
-            result[(f, r)] = round(temp, digits)
-        return result
+        return gain_ratios(self.crank_length, self.cogs, 
+          self.wheels['rear'].diameter, digits=digits)
+
+    def speed_to_cadences(self, speed, digits=1):
+        return speed_to_cadences(speed, self.crank_length, self.cogs,
+          self.wheels['rear'].diameter, digits=digits)
+
+    def cadence_to_speeds(self, cadence, digits=1):
+        return derailer_capacity(self.cogs, digits=digits)
+
+
+    # def gain_ratios(self, digits=1):
+    #     """
+    #     Return the gain ratios.
+    #     For an explanation and calculator, respectively, see
+    #     http://en.wikipedia.org/wiki/Bicycle_gearing#Measuring_gear_ratios
+    #     http://sheldonbrown.com/gain.html.
+    #     The wheel radius is the distance from the center of the hub to the
+    #     rolling surface of the tire.
+    #     """
+    #     result = {}
+    #     wheel_radius = self.wheels['front'].diameter/2
+    #     w = wheel_radius/self.crank_length
+    #     for (f, r) in product(self.cogs['front'], self.cogs['rear']):
+    #         temp = w*f/r
+    #         result[(f, r)] = round(temp, digits)
+    #     return result
         
     def skid_patches(self, ambidextrous=False):
         """
         For each pair of front and rear sprocket combinations (f, r) of in
         this bike's cogset, compute the number of skid patches made on the 
-        rear tire of a fixed gear bike with front sprocket f and rear sprocket r.
+        rear tire of a fixed gear bike with front sprocket f and 
+        rear sprocket r.
         Let a and b denote the numerator and denominator of the fraction
         f/r in lowest terms.
         Then the number of skid patches is b with one proviso.
@@ -87,28 +137,16 @@ class Bicycle(object):
         and a is odd, then the number of skid patches is 2*b.
         """
         result = {}
-        for (f, r) in product(self.front_cogs, self.rear_cogs):
+        for (f, r) in product(self.cogs['front'], self.cogs['rear']):
             g = gcd(f, r)
             a = f/g
             b = r/g
-            if ambidextrous and a % 2 != 0:
+            if ambidextrous and (a % 2) != 0:
                 result[(f, r)] =  2*b
             else: 
                 result[(f, r)] = b
         return result
 
-    def cadence_to_speeds(self, cadence, digits=1):
-        """
-        Return speeds in km/hour. 
-        Cadence is measured in revolutions/minute.
-        """
-        gr = self.gain_ratio()
-        cl = self.crank_length
-        result = {}
-        for (k, g) in gr.items():
-            temp = g*2*pi*cl*cadence*(60.0/1000000)
-            result[k] = round(temp, digits)
-        return result
         
     def trail(self, digits=1): 
         """
