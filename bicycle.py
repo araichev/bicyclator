@@ -6,13 +6,29 @@ from itertools import product
 """
 All lengths are measured in mm unless noted otherwise.
 
-Eventually make it so that user inputs more common measurements,
-such as rim diameter and tire width.
+TODO:
 
-See http://en.wikipedia.org/wiki/Bicycle_gearing#Gear_ratio_calculators
-for good UI features for calculators.
-Good UI at http://www.bikecalc.com/.
+- Turn off rounding by default with ``digits=None``
+- Add more detail to docstrings
+- Make a UI. For inspiration see http://www.bikecalc.com/ and http://en.wikipedia.org/wiki/Bicycle_gearing#Gear_ratio_calculators.
+
 """
+
+def derailer_capacity(cogs):
+    """
+    Return the derailer capacity needed to accommodate the given cog set.
+    """
+    return abs(cogs['front'][-1] - cogs['front'][0]) + \
+      abs(cogs['rear'][-1] - cogs['rear'][0])
+
+def gear_ratios(cogs, digits=1):
+    """
+    Return the gear ratios for the given cogs.
+    """
+    result = {}
+    for (f, r) in product(cogs['front'], cogs['rear']):
+        result[(f, r)] = round(f/r, digits)
+    return result
 
 def gain_ratios(crank_length, cogs, wheel_diameter, digits=1):
     """
@@ -56,12 +72,73 @@ def cadence_to_speeds(cadence, crank_length, cogs, wheel_diameter, digits=1):
         result[k] = round(temp, digits)
     return result
 
-def derailer_capacity(cogs):
+def trail(head_tube_angle, fork_rake, wheel_diameter, digits=1): 
     """
-    Return the derailer capacity needed to accommodate the given cog set.
+    Return  (trail, mechanical trail, wheel flop) for a bicycle
+    with the given parameters.
+    For an explanation and calculator, respectively, see
+    http://en.wikipedia.org/wiki/Bicycle_and_motorcycle_geometry#Trail
+    http://yojimg.net/bike/web_tools/trailcalc.php.
     """
-    return abs(cogs['front'][-1] - cogs['front'][0]) + \
-      abs(cogs['rear'][-1] - cogs['rear'][0])
+    a = radians(head_tube_angle)
+    wheel_radius = wheel_diameter/2
+    trail = (wheel_radius*cos(a) - fork_rake)/sin(a)
+    mechanical_trail = trail*sin(a)
+    wheel_flop = trail*sin(a)*cos(a)
+    result = (trail, mechanical_trail, wheel_flop)
+    return [round(x, digits) for x in result]
+
+def skid_patches(cogs, ambidextrous=False):
+    """
+    For each pair of front and rear cog combinations (f, r), 
+    compute the number of skid patches made on the 
+    rear tire of a fixed gear bike with front cog f and 
+    rear cog r.
+    Let a and b denote the numerator and denominator of the fraction
+    f/r in lowest terms.
+    Then the number of skid patches is b with one proviso.
+    If the skidder is ambidextrous (can skid with either foot forward),
+    and a is odd, then the number of skid patches is 2*b.
+    """
+    result = {}
+    for (f, r) in product(cogs['front'], cogs['rear']):
+        g = gcd(f, r)
+        a = f/g
+        b = r/g
+        if ambidextrous and (a % 2) != 0:
+            result[(f, r)] =  2*b
+        else: 
+            result[(f, r)] = b
+    return result
+
+def spoke_length(center_to_flange, flange_diameter, spoke_hole_diameter,
+  erd, offset, num_spokes, num_crosses, digits=1):
+    """
+    Return the left (nondrive side) and right (drive side) spoke lengths
+    for a bicycle wheel with the given parameters.
+    """
+    result = {}
+    for k in center_to_flange:
+        if k == 'right':
+            o = offset
+        else:
+            o = -offset
+        d = center_to_flange[k] + o
+        r1 = flange_diameter[k]/2
+        r2 = erd/2
+        r3 = spoke_hole_diameter/2
+        a = 2*pi*num_crosses/(num_spokes/2)
+        temp = sqrt(d**2 + r1**2 + r2**2 - 2*r1*r2*cos(a)) - r3
+        result[k] = round(temp, digits)
+    return result
+
+def approx_wheel_diameter(rim_diameter, tire_width, digits=1):
+    """
+    Return the approximate wheel diameter.
+    The rim diameter is the bead seat diameter and not the effective
+    rim diameter (ERD).
+    """
+    return round(rim_diameter + 2*tire_width, digits)
 
 
 class Bicycle(object):
@@ -95,6 +172,9 @@ class Bicycle(object):
     def derailer_capacity(self):
         return derailer_capacity(self.cogs)
 
+    def gear_ratios(self, digits=1):
+        return gear_ratios(self.cogs, digits=digits)
+
     def gain_ratios(self, digits=1):
         return gain_ratios(self.crank_length, self.cogs, 
           self.wheels['rear'].diameter, digits=digits)
@@ -105,65 +185,13 @@ class Bicycle(object):
 
     def cadence_to_speeds(self, cadence, digits=1):
         return derailer_capacity(self.cogs, digits=digits)
-
-
-    # def gain_ratios(self, digits=1):
-    #     """
-    #     Return the gain ratios.
-    #     For an explanation and calculator, respectively, see
-    #     http://en.wikipedia.org/wiki/Bicycle_gearing#Measuring_gear_ratios
-    #     http://sheldonbrown.com/gain.html.
-    #     The wheel radius is the distance from the center of the hub to the
-    #     rolling surface of the tire.
-    #     """
-    #     result = {}
-    #     wheel_radius = self.wheels['front'].diameter/2
-    #     w = wheel_radius/self.crank_length
-    #     for (f, r) in product(self.cogs['front'], self.cogs['rear']):
-    #         temp = w*f/r
-    #         result[(f, r)] = round(temp, digits)
-    #     return result
         
     def skid_patches(self, ambidextrous=False):
-        """
-        For each pair of front and rear sprocket combinations (f, r) of in
-        this bike's cogset, compute the number of skid patches made on the 
-        rear tire of a fixed gear bike with front sprocket f and 
-        rear sprocket r.
-        Let a and b denote the numerator and denominator of the fraction
-        f/r in lowest terms.
-        Then the number of skid patches is b with one proviso.
-        If the skidder is ambidextrous (can skid with either foot forward),
-        and a is odd, then the number of skid patches is 2*b.
-        """
-        result = {}
-        for (f, r) in product(self.cogs['front'], self.cogs['rear']):
-            g = gcd(f, r)
-            a = f/g
-            b = r/g
-            if ambidextrous and (a % 2) != 0:
-                result[(f, r)] =  2*b
-            else: 
-                result[(f, r)] = b
-        return result
+        return skid_patches(self.cogs, ambidextrous=ambidextrous)
 
-        
     def trail(self, digits=1): 
-        """
-        Return this bike's trail, mechanical trail, and wheel flop.
-        For an explanation and calculator, respectively, see
-        http://en.wikipedia.org/wiki/Bicycle_and_motorcycle_geometry#Trail
-        http://yojimg.net/bike/web_tools/trailcalc.php.
-        The wheel radius is the distance from the center of the hub to the
-        rolling surface of the tire.
-        """
-        a = radians(self.head_tube_angle)
-        wheel_radius = self.wheels['front'].diameter/2
-        trail = (wheel_radius*cos(a) - self.fork_rake)/sin(a)
-        mechanical_trail = trail*sin(a)
-        wheel_flop = trail*sin(a)*cos(a)
-        result = (trail, mechanical_trail, wheel_flop)
-        return [round(x, digits) for x in result]
+        return trail(self.head_tube_angle, self.fork_rake,
+          self.wheels['front'].wheel_diameter)
 
 
 class Wheel(object):
@@ -198,24 +226,9 @@ class Wheel(object):
         return s
 
     def spoke_length(self, digits=1):
-        """
-        Return the left (nondrive side) and right (drive side) spoke lengths
-        for this bike's wheel.
-        """
-        result = {}
-        for k in self.center_to_flange:
-            if k == 'right':
-                o = self.offset
-            else:
-                o = -self.offset
-            d = self.center_to_flange[k] + o
-            r1 = self.flange_diameter[k]/2
-            r2 = self.erd/2
-            r3 = self.spoke_hole_diameter/2
-            a = 2*pi*self.num_crosses/(self.num_spokes/2)
-            temp = sqrt(d**2 + r1**2 + r2**2 - 2*r1*r2*cos(a)) - r3
-            result[k] = round(temp, digits)
-        return result
+        return spoke_length(self.center_to_flange, self.flange_diameter, 
+          self.spoke_hole_diameter, self.erd, self.offset, self.num_spokes,
+          self.num_crosses, digits=digits):
 
     def approx_diameter(self):
         """
@@ -223,4 +236,4 @@ class Wheel(object):
         The rim diameter is the bead seat diameter and not the effective
         rim diameter (ERD).
         """
-        return int(self.rim_diameter + 2*self.tire_width)
+        return approx_wheel_diameter(self.rim_diameter, self.tire_width)
