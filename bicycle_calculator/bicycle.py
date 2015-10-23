@@ -4,18 +4,24 @@ from fractions import gcd
 from itertools import product
 
 """
-All lengths are measured in mm unless noted otherwise.
-
-TODO:
-
-- Add more detail to docstrings
-- Make a UI. For inspiration see http://www.bikecalc.com/ and http://en.wikipedia.org/wiki/Bicycle_gearing#Gear_ratio_calculators.
-
+Conventions
+============
+- All lengths are measured in millimeters unless noted otherwise.
+- Front cogs and rear cogs are each encoded as a list of integers
+  representing the number of teeth on the cogs, 
+  e.g. ``front_cogs = [28, 42]``.
+- Wheel diameter is the diameter of the wheel with the tire on and inflated.
 """
 
 def derailer_capacity(front_cogs, rear_cogs):
     """
     Return the derailer capacity needed to accommodate the given cog set.
+    
+    EXAMPLES::
+
+        >>> derailer_capacity([26, 36], [12, 18, 32])
+        30
+
     """
     return abs(front_cogs[-1] - front_cogs[0]) + \
       abs(rear_cogs[-1] - rear_cogs[0])
@@ -23,6 +29,12 @@ def derailer_capacity(front_cogs, rear_cogs):
 def gear_ratios(front_cogs, rear_cogs, digits=None):
     """
     Return the gear ratios for the given cogs.
+
+    EXAMPLES::
+
+        >>> gear_ratios([40], [20, 30])
+        {(40, 30): 1.3333333333333333, (40, 20): 2.0}
+
     """
     result = {}
     for (f, r) in product(front_cogs, rear_cogs):
@@ -33,15 +45,17 @@ def gear_ratios(front_cogs, rear_cogs, digits=None):
 
     return result
 
-def gain_ratios(crank_length, front_cogs, rear_cogs, wheel_diameter, 
+def gain_ratios(front_cogs, rear_cogs, crank_length, wheel_diameter, 
   digits=None):
     """
     Return the gain ratios for the given parameters.
-    For an explanation and calculator, respectively, see
-    http://en.wikipedia.org/wiki/Bicycle_gearing#Measuring_gear_ratios
-    http://sheldonbrown.com/gain.html.
-    The wheel diameter is the diameter of the wheel with the tire on and
-    inflated.
+    For an explanation, see
+    `this Wikipedia article <http://en.wikipedia.org/wiki/Bicycle_gearing#Measuring_gear_ratios>`_.
+
+    EXAMPLES::
+
+        >>> gain_ratios([40], [20, 30], 100, 600)
+        {(40, 30): 4.0, (40, 20): 6.0}
     """
     result = {}
     w = wheel_diameter/2/crank_length
@@ -53,33 +67,44 @@ def gain_ratios(crank_length, front_cogs, rear_cogs, wheel_diameter,
 
     return result
 
-def speed_to_cadences(speed, crank_length, front_cogs, rear_cogs,
-  wheel_diameter, digits=None):
+def cadence_to_speeds(cadence, front_cogs, rear_cogs, crank_length, 
+   wheel_diameter, digits=None):
     """
-    Return cadences in revolutions/second. 
-    Speed is measured in km/hour.
+    Return speeds in kilometers per hour. 
+    Cadence is measured in hertz (revolutions/second).
+
+    EXAMPLES::
+
+        >>> cadence_to_speeds(2, [40], [20, 30], 100, 600, digits=1)
+        {(40, 30): 18.1, (40, 20): 27.1}
+
     """
-    gr = gain_ratios(crank_length, front_cogs, rear_cogs, wheel_diameter)
-    cl = crank_length
+    gr = gain_ratios(front_cogs, rear_cogs, crank_length, wheel_diameter)
     result = {}
     for (k, g) in gr.items():
-        result[k] = speed/(g*2*pi*cl)*(1e6/3600)
+        result[k] = 2*pi*crank_length*g*cadence*(3600/1e6)
 
     if digits is not None:
         result = {k: round(v, digits) for k, v in result.items()}
 
     return result
 
-def cadence_to_speeds(cadence, crank_length, front_cogs, rear_cogs,
-   wheel_diameter, digits=None):
+def speed_to_cadences(speed, front_cogs, rear_cogs, crank_length, 
+  wheel_diameter, digits=None):
     """
-    Return speeds in km/hour. 
-    Cadence is measured in revolutions/second.
+    Return cadences in hertz (revolutions per second). 
+    Speed is measured in kilometers per hour.
+
+    EXAMPLES::
+
+        >>> speed_to_cadences(18.1, [40], [20, 30], 100, 600, digits=1)
+        {(40, 30): 2.0, (40, 20): 1.3}
+
     """
-    gr = gain_ratios(crank_length, front_cogs, rear_cogs, wheel_diameter)
+    gr = gain_ratios(front_cogs, rear_cogs, crank_length, wheel_diameter)
     result = {}
     for (k, g) in gr.items():
-        result[k] = g*2*pi*crank_length*cadence*(3600/1e6)
+        result[k] = speed/(2*pi*crank_length*g*(3600/1e6))
 
     if digits is not None:
         result = {k: round(v, digits) for k, v in result.items()}
@@ -88,11 +113,17 @@ def cadence_to_speeds(cadence, crank_length, front_cogs, rear_cogs,
 
 def trail(head_tube_angle, fork_rake, wheel_diameter, digits=None): 
     """
-    Return [trail, mechanical trail, wheel flop] for a bicycle
-    with the given parameters.
-    For an explanation and calculator, respectively, see
-    http://en.wikipedia.org/wiki/Bicycle_and_motorcycle_geometry#Trail
-    http://yojimg.net/bike/web_tools/trailcalc.php.
+    Return the tuple (trail, mechanical trail, wheel flop) 
+    for a bicycle with the given parameters.
+    
+    For an explanation, see 
+    `this Wikipedia article <http://en.wikipedia.org/wiki/Bicycle_and_motorcycle_geometry#Trail>`_.
+
+    EXAMPLES::
+
+        >>> trail(73, 64, 700, digits=1)
+        (40.1, 38.3, 11.2)
+
     """
     a = radians(head_tube_angle)
     wheel_radius = wheel_diameter/2
@@ -102,20 +133,32 @@ def trail(head_tube_angle, fork_rake, wheel_diameter, digits=None):
     result = [trail, mechanical_trail, wheel_flop]
 
     if digits is not None:
-        result = [round(v, digits) for v in result]
+        result = tuple([round(v, digits) for v in result])
 
     return result
 
-def skid_patches(front_cogs, rear_cogs, ambidextrous=False):
+def num_skid_patches(front_cogs, rear_cogs, ambidextrous=False):
     """
-    For each pair of front and rear cog combinations (f, r), 
-    compute the number of skid patches made on the 
-    rear tire of a fixed gear bike with front cog f and 
-    rear cog r.
-    Let a and b denote the numerator and denominator of the fraction
+    Return a dictionary of the form (front cog, rear cog) ->
+    number of skid patches made on the rear tire of a fixed gear 
+    bicycle with the given front cog and rear cog.
+
+    EXAMPLES::
+
+        >>> num_skid_patches([50], [25, 30], ambidextrous=False)
+        {(50, 30): 3.0, (50, 25): 1.0}
+
+        >>> num_skid_patches([50], [25, 30], ambidextrous=True)
+        {(50, 30): 6.0, (50, 25): 1.0}
+
+    NOTES:
+
+    Let f and r be the number of teeth on the front and rear cog,
+    respectively.
+    Let a and b be the numerator and denominator of the fraction
     f/r in lowest terms.
     Then the number of skid patches is b with one proviso.
-    If the skidder is ambidextrous (can skid with either foot forward),
+    If the skidder is ambidextrous (can skid with either foot forward)
     and a is odd, then the number of skid patches is 2*b.
     """
     result = {}
@@ -134,6 +177,14 @@ def spoke_length(center_to_flange, flange_diameter, spoke_hole_diameter,
     """
     Return the left (nondrive side) and right (drive side) spoke lengths
     for a bicycle wheel with the given parameters.
+
+    EXAMPLES::
+
+        >>> center_to_flange = {'left': 37.1, 'right': 20.9}
+        >>> flange_diameter = {'left': 45, 'right': 45}
+        >>> spoke_length(center_to_flange, flange_diameter, 2.6, 560, 3, 36, 3, digits=1)
+        {'right': 269.2, 'left': 270.3}
+
     """
     result = {}
     for k in center_to_flange:
@@ -157,6 +208,12 @@ def approx_wheel_diameter(bsd, tire_width):
     """
     Return the approximate wheel diameter given the a bead seat diameter
     for a wheel and a tire width.
+
+    EXAMPLES::
+
+        >>> approx_wheel_diameter(584, 42)
+        668
+
     """
     return bsd + 2*tire_width
 
@@ -208,19 +265,9 @@ class Bicycle(object):
 
     def gain_ratios(self, digits=None):
         return gain_ratios(
-          crank_length=self.crank_length, 
           front_cogs=self.front_cogs,
           rear_cogs=self.rear_cogs, 
-          wheel_diameter=self.rear_wheel.diameter, 
-          digits=digits,
-          )
-
-    def speed_to_cadences(self, speed, digits=None):
-        return speed_to_cadences(
-          speed, 
           crank_length=self.crank_length, 
-          front_cogs=self.front_cogs,
-          rear_cogs=self.rear_cogs, 
           wheel_diameter=self.rear_wheel.diameter, 
           digits=digits,
           )
@@ -228,15 +275,25 @@ class Bicycle(object):
     def cadence_to_speeds(self, cadence, digits=None):
         return cadence_to_speeds(
           cadence, 
-          crank_length=self.crank_length, 
           front_cogs=self.front_cogs,
           rear_cogs=self.rear_cogs, 
+          crank_length=self.crank_length, 
+          wheel_diameter=self.rear_wheel.diameter, 
+          digits=digits,
+          )
+
+    def speed_to_cadences(self, speed, digits=None):
+        return speed_to_cadences(
+          speed, 
+          front_cogs=self.front_cogs,
+          rear_cogs=self.rear_cogs, 
+          crank_length=self.crank_length, 
           wheel_diameter=self.rear_wheel.diameter, 
           digits=digits,
           )
         
-    def skid_patches(self, ambidextrous=False):
-        return skid_patches(
+    def num_skid_patches(self, ambidextrous=False):
+        return num_skid_patches(
           front_cogs=self.front_cogs, 
           rear_cogs=self.rear_cogs,
           ambidextrous=ambidextrous,
