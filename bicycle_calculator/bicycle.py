@@ -5,12 +5,18 @@ from itertools import product
 
 """
 Conventions
-============
+------------
 - All lengths are measured in millimeters unless noted otherwise.
 - Front cogs and rear cogs are each encoded as a list of integers
   representing the number of teeth on the cogs, 
   e.g. ``front_cogs = [28, 42]``.
 - Wheel diameter is the diameter of the wheel with the tire on and inflated.
+- Center to flange measurements are encoded by a dictionary with 
+  center-to-left-flange and center-to-right-flange measurements listed
+  under ``'left'`` and ``'right'`` keys, respectively.
+  Similarly with flange diameter measurements.
+  For example ``center_to_flange = {'left': 37.1, 'right': 20.9}`` and
+  ``flange_diameter = {'left': 45, 'right': 45}``
 """
 
 def derailer_capacity(front_cogs, rear_cogs):
@@ -49,13 +55,15 @@ def gain_ratios(front_cogs, rear_cogs, crank_length, wheel_diameter,
   digits=None):
     """
     Return the gain ratios for the given parameters.
-    For an explanation, see
-    `this Wikipedia article <http://en.wikipedia.org/wiki/Bicycle_gearing#Measuring_gear_ratios>`_.
 
     EXAMPLES::
 
         >>> gain_ratios([40], [20, 30], 100, 600)
         {(40, 30): 4.0, (40, 20): 6.0}
+
+    REFERENCES:
+
+    - `Bicycle Gearing <http://en.wikipedia.org/wiki/Bicycle_gearing#Measuring_gear_ratios>`_ from Wikipedia
     """
     result = {}
     w = wheel_diameter/2/crank_length
@@ -116,14 +124,14 @@ def trail(head_tube_angle, fork_rake, wheel_diameter, digits=None):
     Return the tuple (trail, mechanical trail, wheel flop) 
     for a bicycle with the given parameters.
     
-    For an explanation, see 
-    `this Wikipedia article <http://en.wikipedia.org/wiki/Bicycle_and_motorcycle_geometry#Trail>`_.
-
     EXAMPLES::
 
         >>> trail(73, 64, 700, digits=1)
         (40.1, 38.3, 11.2)
 
+    REFERENCES:
+
+    - `Bicycle and Motorcycle Geometry <http://en.wikipedia.org/wiki/Bicycle_and_motorcycle_geometry#Trail>`_ from Wikipedia
     """
     a = radians(head_tube_angle)
     wheel_radius = wheel_diameter/2
@@ -151,15 +159,18 @@ def num_skid_patches(front_cogs, rear_cogs, ambidextrous=False):
         >>> num_skid_patches([50], [25, 30], ambidextrous=True)
         {(50, 30): 6.0, (50, 25): 1.0}
 
-    NOTES:
+    SKID PATCH THEOREM:
 
-    Let f and r be the number of teeth on the front and rear cog,
-    respectively.
-    Let a and b be the numerator and denominator of the fraction
-    f/r in lowest terms.
-    Then the number of skid patches is b with one proviso.
-    If the skidder is ambidextrous (can skid with either foot forward)
-    and a is odd, then the number of skid patches is 2*b.
+    Let a/b be the ratio of the number of teeth on the front cog to the
+    number of teeth on the rear cog written in lowest terms. 
+    Then
+
+    1. For single-sided skidding, there are b skid patches.
+    2. Ambidexterous skidding (skidding with either the left or right foot forward) doubles the number of skid patches if and only if a is odd.
+
+    REFERENCES:
+
+    - `A Bike Forums post <http://www.bikeforums.net/singlespeed-fixed-gear/242123-skid-patch-theorem.html>`_ by user Fraction.
     """
     result = {}
     for (f, r) in product(front_cogs, rear_cogs):
@@ -185,6 +196,9 @@ def spoke_length(center_to_flange, flange_diameter, spoke_hole_diameter,
         >>> spoke_length(center_to_flange, flange_diameter, 2.6, 560, 3, 36, 3, digits=1)
         {'right': 269.2, 'left': 270.3}
 
+    REFERENCES:
+
+    - `Measurements for Spoke Length Calculations <http://www.sheldonbrown.com/spoke-length.html>`_ by John Allen
     """
     result = {}
     for k in center_to_flange:
@@ -208,6 +222,7 @@ def approx_wheel_diameter(bsd, tire_width):
     """
     Return the approximate wheel diameter given the a bead seat diameter
     for a wheel and a tire width.
+    Return the bead seat diameter plus twice the tire width.
 
     EXAMPLES::
 
@@ -251,12 +266,20 @@ class Bicycle(object):
         return s
 
     def derailer_capacity(self):
+        """
+        Call the corresponding module function using this 
+        bicycle's attributes as inputs.
+        """
         return derailer_capacity(
           front_cogs=self.front_cogs,
           rear_cogs=self.rear_cogs,
           )
 
     def gear_ratios(self, digits=None):
+        """
+        Call the corresponding module function using this 
+        bicycle's attributes as inputs.
+        """
         return gear_ratios(
           front_cogs=self.front_cogs,
           rear_cogs=self.rear_cogs, 
@@ -264,6 +287,10 @@ class Bicycle(object):
           )
 
     def gain_ratios(self, digits=None):
+        """
+        Call the corresponding module function using this 
+        bicycle's attributes as inputs.
+        """
         return gain_ratios(
           front_cogs=self.front_cogs,
           rear_cogs=self.rear_cogs, 
@@ -273,6 +300,10 @@ class Bicycle(object):
           )
 
     def cadence_to_speeds(self, cadence, digits=None):
+        """
+        Call the corresponding module function using this 
+        bicycle's attributes as inputs.
+        """
         return cadence_to_speeds(
           cadence, 
           front_cogs=self.front_cogs,
@@ -283,6 +314,10 @@ class Bicycle(object):
           )
 
     def speed_to_cadences(self, speed, digits=None):
+        """
+        Call the corresponding module function using this 
+        bicycle's attributes as inputs.
+        """
         return speed_to_cadences(
           speed, 
           front_cogs=self.front_cogs,
@@ -293,6 +328,10 @@ class Bicycle(object):
           )
         
     def num_skid_patches(self, ambidextrous=False):
+        """
+        Call the corresponding module function using this 
+        bicycle's attributes as inputs.
+        """
         return num_skid_patches(
           front_cogs=self.front_cogs, 
           rear_cogs=self.rear_cogs,
@@ -300,6 +339,10 @@ class Bicycle(object):
           )
 
     def trail(self, digits=None): 
+        """
+        Call the corresponding module function using this 
+        bicycle's attributes as inputs.
+        """
         return trail(
           head_tube_angle=self.head_tube_angle, 
           fork_rake=self.fork_rake,
@@ -309,7 +352,7 @@ class Bicycle(object):
 
 class Wheel(object):
     """
-    Represents a bicycle wheel
+    Represents a bicycle wheel.
     """
     def __init__(self, name=None, bsd=None, erd=None, 
       tire_width=None, diameter=None,
@@ -340,6 +383,10 @@ class Wheel(object):
         return s
 
     def spoke_length(self, digits=None):
+        """
+        Call the corresponding module function using this 
+        wheel's attributes as inputs.
+        """
         return spoke_length(
           center_to_flange=self.center_to_flange, 
           flange_diameter=self.flange_diameter, 
@@ -353,9 +400,8 @@ class Wheel(object):
 
     def approx_diameter(self):
         """
-        Return the approximate wheel radius.
-        The rim diameter is the bead seat diameter and not the effective
-        rim diameter (ERD).
+        Call :func:`approx_wheel_diameter` using this 
+        wheel's attributes as inputs.
         """
         return approx_wheel_diameter(
           bsd=self.bsd, 
