@@ -3,7 +3,7 @@ from distutils.core import setup
 dependencies = []
 setup(
     name='bicycle_calculator',
-    version='0',
+    version='1',
     author='Alex Raichev',
     author_email='alex@raichev.net',
     packages=['bicycle_calculator', 'tests'],
