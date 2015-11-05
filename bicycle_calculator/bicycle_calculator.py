@@ -50,11 +50,22 @@ class Bicycle(object):
         self.rear_wheel = rear_wheel
 
     def __repr__(self):
-        s = self.name + '\n'
-        s += '='*len(self.name) + '\n'
-        for (k, v) in sorted(self.__dict__.items()):
-            s += '{!s} = {!s}\n'.format(k, v)
-        return s
+        if self.name is not None:
+            s = self.name + '\n'
+            s += '='*len(self.name) + '\n'
+        else:
+            s = 'Nameless bicycle\n'
+            s += '================\n'
+        for k in ['front_cogs', 'rear_cogs', 'crank_length',
+          'head_tube_angle', 'fork_rake', 
+          'front_wheel', 'rear_wheel']:
+            v = getattr(self, k)
+            if 'wheel' in k:
+                s += '\n{!s} = {!s}\n'.format(k, v)
+            else:
+                s += '{!s} = {!s}\n'.format(k, v)
+        # Remove final new line
+        return s[:-1]
 
     # def derailer_capacity(self):
     #     """
@@ -167,11 +178,16 @@ class Wheel(object):
         self.offset = offset
 
     def __repr__(self):
-        s = self.name + '\n'
-        s += '-'*len(self.name) + '\n'
+        if self.name is not None:
+            s = self.name + '\n'
+            s += '-'*(len(self.name) + 10) + '\n'
+        else:
+            s = 'Nameless wheel\n'
+            s += '----------------------------\n'
         for (k, v) in sorted(self.__dict__.items()):
             s += '{!s} = {!s}\n'.format(k, v)
-        return s
+        # Remove final new line
+        return s[:-1]
 
     # def spoke_length(self, digits=None):
     #     """
@@ -199,37 +215,66 @@ class Wheel(object):
     #       tire_width=self.tire_width
     #       )
 
+def check_attrs(obj, *attrs):
+    for attr in attrs:
+        v = getattr(obj, attr)
+        if not v:
+            raise ValueError("Attribute '{!s}' "\
+              "must not be None or empty in object \n{!s}".format(attr, obj))
+
+def get_attrs(obj, *attrs):
+    return [getattr(obj, attr) for attr in attrs]
 
 def derailer_capacity(bicycle):
     """
-    Return the derailer capacity needed to accommodate the given cog set.
+    Return the derailer capacity needed to accommodate the cog set
+    on the given Bicycle object.
     
-    Uses the following bicycle attributes:
+    Assume the following bicycle attributes are non-null and non-empty:
 
     - front_cogs
     - rear_cogs
 
+    Raise a ``ValueError``, if that is not the case.
+    
     EXAMPLES::
 
-        >>> derailer_capacity([26, 36], [12, 18, 32])
+        >>> b = Bicyle(front_cogs=[26, 36], rear_cogs=[12, 18, 32])
+        >>> derailer_capacity(b)
         30
 
     """
-    return abs(front_cogs[-1] - front_cogs[0]) + \
-      abs(rear_cogs[-1] - rear_cogs[0])
+    attrs = ['front_cogs', 'rear_cogs']
+    check_attrs(bicycle, *attrs)
 
-def gear_ratios(front_cogs, rear_cogs, digits=None):
+    b = bicycle
+    return abs(b.front_cogs[-1] - b.front_cogs[0]) + \
+      abs(b.rear_cogs[-1] - b.rear_cogs[0])
+
+def gear_ratios(bicycle, digits=None):
     """
-    Return the gear ratios for the given cogs.
+    Return the gear ratios for the given Bicycle object.
+
+    Assume the following bicycle attributes are non-null and non-empty:
+
+    - front_cogs
+    - rear_cogs
+
+    Raise a ``ValueError``, if that is not the case.
 
     EXAMPLES::
 
-        >>> gear_ratios([40], [20, 30])
+        >>> b = Bicycle(front_cogs=[40], rear_cogs=[20, 30])
+        >>> gear_ratios(b)
         {(40, 30): 1.3333333333333333, (40, 20): 2.0}
 
     """
+    attrs = ['front_cogs', 'rear_cogs']
+    check_attrs(bicycle, *attrs)
+
+    b = bicycle
     result = {}
-    for (f, r) in product(front_cogs, rear_cogs):
+    for (f, r) in product(b.front_cogs, b.rear_cogs):
         result[(f, r)] = f/r
 
     if digits is not None:
@@ -237,10 +282,18 @@ def gear_ratios(front_cogs, rear_cogs, digits=None):
 
     return result
 
-def gain_ratios(front_cogs, rear_cogs, crank_length, wheel_diameter, 
-  digits=None):
+def gain_ratios(bicycle, digits=None):
     """
-    Return the gain ratios for the given parameters.
+    Return the gain ratios for the given Bicycle object.
+
+    Assume the following bicycle attributes are non-null and non-empty:
+
+    - front_cogs
+    - rear_cogs
+    - crank_length
+    - rear_wheel
+
+    Raise a ``ValueError``, if that is not the case.
 
     EXAMPLES::
 
@@ -251,9 +304,15 @@ def gain_ratios(front_cogs, rear_cogs, crank_length, wheel_diameter,
 
     - `Bicycle Gearing <http://en.wikipedia.org/wiki/Bicycle_gearing#Measuring_gear_ratios>`_ from Wikipedia
     """
+    attrs = ['front_cogs', 'rear_cogs', 'crank_length', 'rear_wheel']
+    check_attrs(bicycle, *attrs)
+    rear_wheel = bicycle.rear_wheel
+    check_attrs(rear_wheel, 'diameter')
+
+    b = bicycle
     result = {}
-    w = wheel_diameter/2/crank_length
-    for (f, r) in product(front_cogs, rear_cogs):
+    w = b.rear_wheel.diameter/2/b.crank_length
+    for (f, r) in product(b.front_cogs, b.rear_cogs):
         result[(f, r)] = w*f/r
 
     if digits is not None:
