@@ -121,9 +121,6 @@ def check_attrs(obj, *attrs):
             raise ValueError("Attribute '{!s}' "\
               "must not be None or empty in object \n{!s}".format(attr, obj))
 
-def get_attrs(obj, *attrs):
-    return [getattr(obj, attr) for attr in attrs]
-
 def derailer_capacity(bicycle):
     """
     Return the derailer capacity needed to accommodate the cog set
