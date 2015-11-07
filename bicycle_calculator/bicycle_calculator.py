@@ -1,11 +1,8 @@
 """
 Conventions
 ------------
-- All lengths are measured in millimeters unless noted otherwise.
-- Front cogs and rear cogs are each encoded as a list of integers
-  representing the number of teeth on the cogs, 
-  e.g. ``front_cogs = [28, 42]``.
-- Wheel diameter is the diameter of the wheel with the tire on and inflated.
+- All lengths are measured in millimeters and all angles are measured in degrees, unless noted otherwise
+- Wheel diameter is the diameter of the wheel with the tire on and inflated
 - Center to flange measurements are encoded by a dictionary with 
   center-to-left-flange and center-to-right-flange measurements listed
   under ``'left'`` and ``'right'`` keys, respectively.
@@ -27,6 +24,18 @@ from itertools import product
 class Bicycle(object):
     """
     Represents a bicycle.
+
+    Attributes:
+
+    - name
+    - front_cogs: list of integers representing the number of teeth on 
+      the cogs, e.g. ``front_cogs = [28, 42]``
+    - rear_cogs: list of integers representing the number of teeth on 
+      the cogs, e.g. ``rear_cogs = [10, 15, 20, 25, 30]``
+    - head_tube_angle
+    - fork_rake
+    - front_wheel: a Wheel instance
+    - rear_wheel: a Wheel instance
     """
     def __init__(self, name=None, head_tube_angle=None, 
       fork_rake=None, crank_length=None,
@@ -67,90 +76,6 @@ class Bicycle(object):
         # Remove final new line
         return s[:-1]
 
-    # def derailer_capacity(self):
-    #     """
-    #     Call the corresponding module function using this 
-    #     bicycle's attributes as inputs.
-    #     """
-    #     return derailer_capacity(
-    #       front_cogs=self.front_cogs,
-    #       rear_cogs=self.rear_cogs,
-    #       )
-
-    # def gear_ratios(self, digits=None):
-    #     """
-    #     Call the corresponding module function using this 
-    #     bicycle's attributes as inputs.
-    #     """
-    #     return gear_ratios(
-    #       front_cogs=self.front_cogs,
-    #       rear_cogs=self.rear_cogs, 
-    #       digits=digits,
-    #       )
-
-    # def gain_ratios(self, digits=None):
-    #     """
-    #     Call the corresponding module function using this 
-    #     bicycle's attributes as inputs.
-    #     """
-    #     return gain_ratios(
-    #       front_cogs=self.front_cogs,
-    #       rear_cogs=self.rear_cogs, 
-    #       crank_length=self.crank_length, 
-    #       wheel_diameter=self.rear_wheel.diameter, 
-    #       digits=digits,
-    #       )
-
-    # def cadence_to_speeds(self, cadence, digits=None):
-    #     """
-    #     Call the corresponding module function using this 
-    #     bicycle's attributes as inputs.
-    #     """
-    #     return cadence_to_speeds(
-    #       cadence, 
-    #       front_cogs=self.front_cogs,
-    #       rear_cogs=self.rear_cogs, 
-    #       crank_length=self.crank_length, 
-    #       wheel_diameter=self.rear_wheel.diameter, 
-    #       digits=digits,
-    #       )
-
-    # def speed_to_cadences(self, speed, digits=None):
-    #     """
-    #     Call the corresponding module function using this 
-    #     bicycle's attributes as inputs.
-    #     """
-    #     return speed_to_cadences(
-    #       speed, 
-    #       front_cogs=self.front_cogs,
-    #       rear_cogs=self.rear_cogs, 
-    #       crank_length=self.crank_length, 
-    #       wheel_diameter=self.rear_wheel.diameter, 
-    #       digits=digits,
-    #       )
-        
-    # def num_skid_patches(self, ambidextrous=False):
-    #     """
-    #     Call the corresponding module function using this 
-    #     bicycle's attributes as inputs.
-    #     """
-    #     return num_skid_patches(
-    #       front_cogs=self.front_cogs, 
-    #       rear_cogs=self.rear_cogs,
-    #       ambidextrous=ambidextrous,
-    #       )
-
-    # def trail(self, digits=None): 
-    #     """
-    #     Call the corresponding module function using this 
-    #     bicycle's attributes as inputs.
-    #     """
-    #     return trail(
-    #       head_tube_angle=self.head_tube_angle, 
-    #       fork_rake=self.fork_rake,
-    #       wheel_diameter=self.front_wheel.diameter,
-    #       )
-
 
 class Wheel(object):
     """
@@ -189,32 +114,6 @@ class Wheel(object):
         # Remove final new line
         return s[:-1]
 
-    # def spoke_length(self, digits=None):
-    #     """
-    #     Call the corresponding module function using this 
-    #     wheel's attributes as inputs.
-    #     """
-    #     return spoke_length(
-    #       center_to_flange=self.center_to_flange, 
-    #       flange_diameter=self.flange_diameter, 
-    #       spoke_hole_diameter=self.spoke_hole_diameter, 
-    #       erd=self.erd, 
-    #       offset=self.offset, 
-    #       num_spokes=self.num_spokes,
-    #       num_crosses=self.num_crosses, 
-    #       digits=digits
-    #       )
-
-    # def approx_diameter(self):
-    #     """
-    #     Call :func:`approx_wheel_diameter` using this 
-    #     wheel's attributes as inputs.
-    #     """
-    #     return approx_wheel_diameter(
-    #       bsd=self.bsd, 
-    #       tire_width=self.tire_width
-    #       )
-
 def check_attrs(obj, *attrs):
     for attr in attrs:
         v = getattr(obj, attr)
@@ -244,12 +143,61 @@ def derailer_capacity(bicycle):
         30
 
     """
-    attrs = ['front_cogs', 'rear_cogs']
-    check_attrs(bicycle, *attrs)
-
     b = bicycle
+    attrs = ['front_cogs', 'rear_cogs']
+    check_attrs(b, *attrs)
+
     return abs(b.front_cogs[-1] - b.front_cogs[0]) + \
       abs(b.rear_cogs[-1] - b.rear_cogs[0])
+
+def num_skid_patches(bicycle, ambidextrous=False):
+    """
+    Return a dictionary of the form (front cog, rear cog) ->
+    number of skid patches made on the rear tire of a fixed gear 
+    bicycle with the given front cog and rear cog.
+
+    Assume the following bicycle attributes are non-null and non-empty:
+
+    - front_cogs
+    - rear_cogs
+
+    Raise a ``ValueError``, if that is not the case.
+
+    EXAMPLES::
+
+        >>> num_skid_patches([50], [25, 30], ambidextrous=False)
+        {(50, 30): 3.0, (50, 25): 1.0}
+
+        >>> num_skid_patches([50], [25, 30], ambidextrous=True)
+        {(50, 30): 6.0, (50, 25): 1.0}
+
+    SKID PATCH THEOREM:
+
+    Let a/b be the ratio of the number of teeth on the front cog to the
+    number of teeth on the rear cog written in lowest terms. 
+    Then
+
+    1. For single-sided skidding, there are b skid patches.
+    2. Ambidexterous skidding (skidding with either the left or right foot forward) doubles the number of skid patches if and only if a is odd.
+
+    REFERENCES:
+
+    - `A Bike Forums post <http://www.bikeforums.net/singlespeed-fixed-gear/242123-skid-patch-theorem.html>`_ by user Fraction.
+    """
+    b = bicycle
+    attrs = ['front_cogs', 'rear_cogs']
+    check_attrs(b, *attrs)
+
+    result = {}
+    for (f, r) in product(b.front_cogs, b.rear_cogs):
+        g = gcd(f, r)
+        a = f/g
+        b = r/g
+        if ambidextrous and (a % 2) != 0:
+            result[(f, r)] =  2*b
+        else: 
+            result[(f, r)] = b
+    return result
 
 def gear_ratios(bicycle, digits=None):
     """
@@ -269,10 +217,10 @@ def gear_ratios(bicycle, digits=None):
         {(40, 30): 1.3333333333333333, (40, 20): 2.0}
 
     """
-    attrs = ['front_cogs', 'rear_cogs']
-    check_attrs(bicycle, *attrs)
-
     b = bicycle
+    attrs = ['front_cogs', 'rear_cogs']
+    check_attrs(b, *attrs)
+
     result = {}
     for (f, r) in product(b.front_cogs, b.rear_cogs):
         result[(f, r)] = f/r
@@ -304,12 +252,11 @@ def gain_ratios(bicycle, digits=None):
 
     - `Bicycle Gearing <http://en.wikipedia.org/wiki/Bicycle_gearing#Measuring_gear_ratios>`_ from Wikipedia
     """
-    attrs = ['front_cogs', 'rear_cogs', 'crank_length', 'rear_wheel']
-    check_attrs(bicycle, *attrs)
-    rear_wheel = bicycle.rear_wheel
-    check_attrs(rear_wheel, 'diameter')
-
     b = bicycle
+    attrs = ['front_cogs', 'rear_cogs', 'crank_length', 'rear_wheel']
+    check_attrs(b, *attrs)
+    check_attrs(b.rear_wheel, 'diameter')
+
     result = {}
     w = b.rear_wheel.diameter/2/b.crank_length
     for (f, r) in product(b.front_cogs, b.rear_cogs):
@@ -320,11 +267,19 @@ def gain_ratios(bicycle, digits=None):
 
     return result
 
-def cadence_to_speeds(cadence, front_cogs, rear_cogs, crank_length, 
-   wheel_diameter, digits=None):
+def cadence_to_speeds(bicycle, cadence, digits=None):
     """
     Return speeds in kilometers per hour. 
     Cadence is measured in hertz (revolutions/second).
+
+    Assume the following bicycle attributes are non-null and non-empty:
+
+    - front_cogs
+    - rear_cogs
+    - crank_length
+    - rear_wheel
+
+    Raise a ``ValueError``, if that is not the case.
 
     EXAMPLES::
 
@@ -332,21 +287,34 @@ def cadence_to_speeds(cadence, front_cogs, rear_cogs, crank_length,
         {(40, 30): 18.1, (40, 20): 27.1}
 
     """
-    gr = gain_ratios(front_cogs, rear_cogs, crank_length, wheel_diameter)
+    b = bicycle
+    attrs = ['front_cogs', 'rear_cogs', 'crank_length', 'rear_wheel']
+    check_attrs(b, *attrs)
+    check_attrs(b.rear_wheel, 'diameter')
+
+    gr = gain_ratios(b)
     result = {}
     for (k, g) in gr.items():
-        result[k] = 2*pi*crank_length*g*cadence*(3600/1e6)
+        result[k] = 2*pi*b.crank_length*g*cadence*(3600/1e6)
 
     if digits is not None:
         result = {k: round(v, digits) for k, v in result.items()}
 
     return result
 
-def speed_to_cadences(speed, front_cogs, rear_cogs, crank_length, 
-  wheel_diameter, digits=None):
+def speed_to_cadences(bicycle, speed, digits=None):
     """
     Return cadences in hertz (revolutions per second). 
     Speed is measured in kilometers per hour.
+
+    Assume the following bicycle attributes are non-null and non-empty:
+
+    - front_cogs
+    - rear_cogs
+    - crank_length
+    - rear_wheel
+
+    Raise a ``ValueError``, if that is not the case.
 
     EXAMPLES::
 
@@ -354,21 +322,34 @@ def speed_to_cadences(speed, front_cogs, rear_cogs, crank_length,
         {(40, 30): 2.0, (40, 20): 1.3}
 
     """
-    gr = gain_ratios(front_cogs, rear_cogs, crank_length, wheel_diameter)
+    b = bicycle
+    attrs = ['front_cogs', 'rear_cogs', 'crank_length', 'rear_wheel']
+    check_attrs(b, *attrs)
+    check_attrs(b.rear_wheel, 'diameter')
+
+    gr = gain_ratios(b)
     result = {}
     for (k, g) in gr.items():
-        result[k] = speed/(2*pi*crank_length*g*(3600/1e6))
+        result[k] = speed/(2*pi*b.crank_length*g*(3600/1e6))
 
     if digits is not None:
         result = {k: round(v, digits) for k, v in result.items()}
 
     return result
 
-def trail(head_tube_angle, fork_rake, wheel_diameter, digits=None): 
+def trail(bicycle, digits=None): 
     """
     Return the tuple (trail, mechanical trail, wheel flop) 
     for a bicycle with the given parameters.
     
+    Assume the following bicycle attributes are non-null and non-empty:
+
+    - head_tube_angle
+    - fork_rake
+    - front_wheel
+
+    Raise a ``ValueError``, if that is not the case.
+
     EXAMPLES::
 
         >>> trail(73, 64, 700, digits=1)
@@ -378,9 +359,14 @@ def trail(head_tube_angle, fork_rake, wheel_diameter, digits=None):
 
     - `Bicycle and Motorcycle Geometry <http://en.wikipedia.org/wiki/Bicycle_and_motorcycle_geometry#Trail>`_ from Wikipedia
     """
-    a = radians(head_tube_angle)
-    wheel_radius = wheel_diameter/2
-    trail = (wheel_radius*cos(a) - fork_rake)/sin(a)
+    b = bicycle
+    attrs = ['head_tube_angle', 'fork_rake', 'front_wheel']
+    check_attrs(b, *attrs)
+    check_attrs(b.front_wheel, 'diameter')
+
+    a = radians(b.head_tube_angle)
+    wheel_radius = b.front_wheel.diameter/2
+    trail = (wheel_radius*cos(a) - b.fork_rake)/sin(a)
     mechanical_trail = trail*sin(a)
     wheel_flop = trail*sin(a)*cos(a)
     result = [trail, mechanical_trail, wheel_flop]
@@ -390,49 +376,17 @@ def trail(head_tube_angle, fork_rake, wheel_diameter, digits=None):
 
     return result
 
-def num_skid_patches(front_cogs, rear_cogs, ambidextrous=False):
-    """
-    Return a dictionary of the form (front cog, rear cog) ->
-    number of skid patches made on the rear tire of a fixed gear 
-    bicycle with the given front cog and rear cog.
-
-    EXAMPLES::
-
-        >>> num_skid_patches([50], [25, 30], ambidextrous=False)
-        {(50, 30): 3.0, (50, 25): 1.0}
-
-        >>> num_skid_patches([50], [25, 30], ambidextrous=True)
-        {(50, 30): 6.0, (50, 25): 1.0}
-
-    SKID PATCH THEOREM:
-
-    Let a/b be the ratio of the number of teeth on the front cog to the
-    number of teeth on the rear cog written in lowest terms. 
-    Then
-
-    1. For single-sided skidding, there are b skid patches.
-    2. Ambidexterous skidding (skidding with either the left or right foot forward) doubles the number of skid patches if and only if a is odd.
-
-    REFERENCES:
-
-    - `A Bike Forums post <http://www.bikeforums.net/singlespeed-fixed-gear/242123-skid-patch-theorem.html>`_ by user Fraction.
-    """
-    result = {}
-    for (f, r) in product(front_cogs, rear_cogs):
-        g = gcd(f, r)
-        a = f/g
-        b = r/g
-        if ambidextrous and (a % 2) != 0:
-            result[(f, r)] =  2*b
-        else: 
-            result[(f, r)] = b
-    return result
-
-def spoke_length(center_to_flange, flange_diameter, spoke_hole_diameter,
-  erd, offset, num_spokes, num_crosses, digits=None):
+def spoke_length(bicyle, which_wheel, digits=None):
     """
     Return the left (nondrive side) and right (drive side) spoke lengths
-    for a bicycle wheel with the given parameters.
+    for the given bicycle and its given wheel attribute 
+    (either 'front_wheel' or 'rear_wheel').
+
+    Assume the following bicycle attributes are non-null and non-empty:
+
+    - front_wheel, if ``which_wheel == 'front_wheel'``; rear_wheel, otherwise
+
+    Raise a ``ValueError``, if that is not the case.
 
     EXAMPLES::
 
@@ -445,17 +399,27 @@ def spoke_length(center_to_flange, flange_diameter, spoke_hole_diameter,
 
     - `Measurements for Spoke Length Calculations <http://www.sheldonbrown.com/spoke-length.html>`_ by John Allen
     """
+    if which_wheel not in ['front_wheel', 'rear_wheel']:
+        raise ValueError("which_wheel must be 'front_wheel' or 'rear_wheel'")
+    
+    b = bicycle
+    check_attrs(b, which_wheel)
+    attrs = ['center_to_flange', 'flange_diameter', 'spoke_hole_diameter',
+      'erd', 'offset', 'num_spokes', 'num_crosses']
+    w = getattr(b, which_wheel)
+    check_attrs(w, *attrs)
+
     result = {}
-    for k in center_to_flange:
+    for k in w.center_to_flange:
         if k == 'right':
-            o = offset
+            o = w.offset
         else:
-            o = -offset
-        d = center_to_flange[k] + o
-        r1 = flange_diameter[k]/2
-        r2 = erd/2
-        r3 = spoke_hole_diameter/2
-        a = 2*pi*num_crosses/(num_spokes/2)
+            o = -w.offset
+        d = w.center_to_flange[k] + o
+        r1 = w.flange_diameter[k]/2
+        r2 = w.erd/2
+        r3 = w.spoke_hole_diameter/2
+        a = 2*pi*w.num_crosses/(w.num_spokes/2)
         result[k] = sqrt(d**2 + r1**2 + r2**2 - 2*r1*r2*cos(a)) - r3
 
     if digits is not None:
@@ -463,11 +427,15 @@ def spoke_length(center_to_flange, flange_diameter, spoke_hole_diameter,
 
     return result
 
-def approx_wheel_diameter(bsd, tire_width):
+def approx_wheel_diameter(bicycle, which_wheel):
     """
     Return the approximate wheel diameter given the a bead seat diameter
     for a wheel and a tire width.
     Return the bead seat diameter plus twice the tire width.
+
+    Assume the following bicycle attributes are non-null and non-empty:
+
+    - front_wheel, if ``which_wheel == 'front_wheel'``; rear_wheel, otherwise
 
     EXAMPLES::
 
@@ -475,6 +443,15 @@ def approx_wheel_diameter(bsd, tire_width):
         668
 
     """
-    return bsd + 2*tire_width
+    if which_wheel not in ['front_wheel', 'rear_wheel']:
+        raise ValueError("which_wheel must be 'front_wheel' or 'rear_wheel'")
+    
+    b = bicycle
+    check_attrs(b, which_wheel)
+    attrs = ['bsd', 'tire_width']
+    w = getattr(b, which_wheel)
+    check_attrs(w, *attrs)
+
+    return w.bsd + 2*w.tire_width
 
 
