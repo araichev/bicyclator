@@ -373,15 +373,20 @@ def trail(bicycle, digits=None):
 
     return result
 
-def spoke_length(bicyle, which_wheel, digits=None):
+def spoke_length(wheel, digits=None):
     """
     Return the left (nondrive side) and right (drive side) spoke lengths
-    for the given bicycle and its given wheel attribute 
-    (either 'front_wheel' or 'rear_wheel').
+    for the given wheel.
 
     Assume the following bicycle attributes are non-null and non-empty:
 
-    - front_wheel, if ``which_wheel == 'front_wheel'``; rear_wheel, otherwise
+    - center_to_flange
+    - flange_diameter
+    - spoke_hole_diameter
+    - erd
+    - offset
+    - num_spokes
+    - num_crosses
 
     Raise a ``ValueError``, if that is not the case.
 
@@ -399,11 +404,9 @@ def spoke_length(bicyle, which_wheel, digits=None):
     if which_wheel not in ['front_wheel', 'rear_wheel']:
         raise ValueError("which_wheel must be 'front_wheel' or 'rear_wheel'")
     
-    b = bicycle
-    check_attrs(b, which_wheel)
+    w = wheel
     attrs = ['center_to_flange', 'flange_diameter', 'spoke_hole_diameter',
       'erd', 'offset', 'num_spokes', 'num_crosses']
-    w = getattr(b, which_wheel)
     check_attrs(w, *attrs)
 
     result = {}
@@ -424,15 +427,17 @@ def spoke_length(bicyle, which_wheel, digits=None):
 
     return result
 
-def approx_wheel_diameter(bicycle, which_wheel):
+def approx_diameter(wheel):
     """
-    Return the approximate wheel diameter given the a bead seat diameter
-    for a wheel and a tire width.
-    Return the bead seat diameter plus twice the tire width.
+    Return the approximate diameter of the given wheel, 
+    which is the bead seat diameter plus twice the tire width.
 
-    Assume the following bicycle attributes are non-null and non-empty:
+    Assume the following wheel attributes are non-null and non-empty:
 
-    - front_wheel, if ``which_wheel == 'front_wheel'``; rear_wheel, otherwise
+    - bsd
+    - tire_width
+
+    Raise a ``ValueError``, if that is not the case.
 
     EXAMPLES::
 
@@ -440,13 +445,8 @@ def approx_wheel_diameter(bicycle, which_wheel):
         668
 
     """
-    if which_wheel not in ['front_wheel', 'rear_wheel']:
-        raise ValueError("which_wheel must be 'front_wheel' or 'rear_wheel'")
-    
-    b = bicycle
-    check_attrs(b, which_wheel)
+    w = wheel
     attrs = ['bsd', 'tire_width']
-    w = getattr(b, which_wheel)
     check_attrs(w, *attrs)
 
     return w.bsd + 2*w.tire_width
