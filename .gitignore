@@ -1,12 +1,4 @@
 *__pycache__*
-
-build/
 dist/
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*,cover
 docs/_build/
+*.ipynb_checkpoints*

@@ -1,18 +1,8 @@
 """
-Conventions
-------------
-- All lengths are measured in millimeters and all angles are measured in degrees, unless noted otherwise
-- Wheel diameter is the diameter of the wheel with the tire on and inflated
-- Center to flange measurements are encoded by a dictionary with 
-  center-to-left-flange and center-to-right-flange measurements listed
-  under ``'left'`` and ``'right'`` keys, respectively.
-  Similarly with flange diameter measurements.
-  For example ``center_to_flange = {'left': 37.1, 'right': 20.9}`` and
-  ``flange_diameter = {'left': 45, 'right': 45}``
+Conventions:
 
-Todo
-----
-- Update docstring examples
+- All lengths are measured in millimeters, unless noted otherwise
+- All angles are measured in degrees, unless noted otherwise
 """
 
 import functools
@@ -80,11 +70,25 @@ class Bicycle(object):
 class Wheel(object):
     """
     Represents a bicycle wheel.
+
+    Attributes:
+
+    - name
+    - bsd: bead seat diameter, e.g. 684 for a 650b rim
+    - erd: effective rim diameter, e.g. 650 for a 650b rim 
+    - tire_width
+    - diameter: diameter of the wheel with the tire on and inflated
+    - center_to_flange: dictionary of the form ``{'left': 37.1, 'right': 20.9}``
+    - flange_diameter: dictionary of the form ``{'left': 45, 'right': 45}``
+    - spoke_hole_diameter
+    - num_spokes
+    - num_crosses: number of crosses in spoke pattern, e.g. 3 
+    - offset: for off-center rims
     """
     def __init__(self, name=None, bsd=None, erd=None, 
       tire_width=None, diameter=None,
       center_to_flange=None, flange_diameter=None,
-      spoke_hole_diameter=2.6, num_spokes=None, num_crosses=None, 
+      spoke_hole_diameter=2.6, num_spokes=None, num_crosses=3, 
       offset=0):
         self.name = name
         self.erd = erd
@@ -135,7 +139,7 @@ def derailer_capacity(bicycle):
     
     EXAMPLES::
 
-        >>> b = Bicyle(front_cogs=[26, 36], rear_cogs=[12, 18, 32])
+        >>> b = Bicycle(front_cogs=[26, 36], rear_cogs=[12, 18, 32])
         >>> derailer_capacity(b)
         30
 
@@ -162,10 +166,10 @@ def num_skid_patches(bicycle, ambidextrous=False):
 
     EXAMPLES::
 
-        >>> num_skid_patches([50], [25, 30], ambidextrous=False)
+        >>> b = Bicycle(front_cogs=[50], rear_cogs=[25, 30])
+        >>> num_skid_patches(b, ambidextrous=False)
         {(50, 30): 3.0, (50, 25): 1.0}
-
-        >>> num_skid_patches([50], [25, 30], ambidextrous=True)
+        >>> num_skid_patches(b, ambidextrous=True)
         {(50, 30): 6.0, (50, 25): 1.0}
 
     SKID PATCH THEOREM:
@@ -242,7 +246,9 @@ def gain_ratios(bicycle, digits=None):
 
     EXAMPLES::
 
-        >>> gain_ratios([40], [20, 30], 100, 600)
+        >>> w = Wheel(diameter=600)
+        >>> b = Bicycle(front_cogs=[40], rear_cogs=[20, 30], crank_length=100, rear_wheel=w)
+        >>> gain_ratios(b, digits=1)
         {(40, 30): 4.0, (40, 20): 6.0}
 
     REFERENCES:
@@ -280,7 +286,9 @@ def cadence_to_speeds(bicycle, cadence, digits=None):
 
     EXAMPLES::
 
-        >>> cadence_to_speeds(2, [40], [20, 30], 100, 600, digits=1)
+        >>> w = Wheel(diameter=600)
+        >>> b = Bicycle(front_cogs=[40], rear_cogs=[20, 30], crank_length=100, rear_wheel=w)
+        >>> cadence_to_speeds(b, 2, digits=1)
         {(40, 30): 18.1, (40, 20): 27.1}
 
     """
@@ -315,7 +323,9 @@ def speed_to_cadences(bicycle, speed, digits=None):
 
     EXAMPLES::
 
-        >>> speed_to_cadences(18.1, [40], [20, 30], 100, 600, digits=1)
+        >>> w = Wheel(diameter=600)
+        >>> b = Bicycle(front_cogs=[40], rear_cogs=[20, 30], crank_length=100, rear_wheel=w)
+        >>> speed_to_cadences(b, 18.1, digits=1)
         {(40, 30): 2.0, (40, 20): 1.3}
 
     """
@@ -349,7 +359,9 @@ def trail(bicycle, digits=None):
 
     EXAMPLES::
 
-        >>> trail(73, 64, 700, digits=1)
+        >>> w = Wheel(diameter=700)
+        >>> b = Bicycle(head_tube_angle=73, fork_rake=64, front_wheel=w)
+        >>> trail(b, digits=1)
         (40.1, 38.3, 11.2)
 
     REFERENCES:
@@ -392,18 +404,14 @@ def spoke_length(wheel, digits=None):
 
     EXAMPLES::
 
-        >>> center_to_flange = {'left': 37.1, 'right': 20.9}
-        >>> flange_diameter = {'left': 45, 'right': 45}
-        >>> spoke_length(center_to_flange, flange_diameter, 2.6, 560, 3, 36, 3, digits=1)
+        >>> w = Wheel(center_to_flange={'left': 37.1, 'right': 20.9}, flange_diameter={'left': 45, 'right': 45}, erd=560, spoke_hole_diameter=2.6, offset=3, num_spokes=36, num_crosses=3)
+        >>> spoke_length(w, digits=1)
         {'right': 269.2, 'left': 270.3}
 
     REFERENCES:
 
     - `Measurements for Spoke Length Calculations <http://www.sheldonbrown.com/spoke-length.html>`_ by John Allen
     """
-    if which_wheel not in ['front_wheel', 'rear_wheel']:
-        raise ValueError("which_wheel must be 'front_wheel' or 'rear_wheel'")
-    
     w = wheel
     attrs = ['center_to_flange', 'flange_diameter', 'spoke_hole_diameter',
       'erd', 'offset', 'num_spokes', 'num_crosses']
@@ -441,7 +449,8 @@ def approx_diameter(wheel):
 
     EXAMPLES::
 
-        >>> approx_wheel_diameter(584, 42)
+        >>> w = Wheel(bsd=584, tire_width=42)
+        >>> approx_diameter(w)
         668
 
     """
