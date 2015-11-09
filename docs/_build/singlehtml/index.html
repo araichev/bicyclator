@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Bicycle Calculator 1 documentation</title>
+    <title>Bicycle Calculator 2 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1',
+        VERSION:     '2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -37,146 +37,138 @@
           <div class="body" role="main">
             
   <div class="section" id="bicycle-calculator-release-documentation">
-<h1>Bicycle Calculator 1 Documentation<a class="headerlink" href="#bicycle-calculator-release-documentation" title="Permalink to this headline">¶</a></h1>
+<h1>Bicycle Calculator 2 Documentation<a class="headerlink" href="#bicycle-calculator-release-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <span id="document-bicycle_calculator"></span><div class="section" id="bicycle-calculator-package">
-<h2>bicycle_calculator package<a class="headerlink" href="#bicycle-calculator-package" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="bicycle-calculator-bicycle-module">
-<h3>bicycle_calculator.bicycle module<a class="headerlink" href="#bicycle-calculator-bicycle-module" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="conventions">
-<h4>Conventions<a class="headerlink" href="#conventions" title="Permalink to this headline">¶</a></h4>
+<h2>bicycle_calculator Package<a class="headerlink" href="#bicycle-calculator-package" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-bicycle_calculator.bicycle_calculator">
+<span id="bicycle-calculator-module"></span><h3>bicycle_calculator Module<a class="headerlink" href="#module-bicycle_calculator.bicycle_calculator" title="Permalink to this headline">¶</a></h3>
+<p>Conventions:</p>
 <ul class="simple">
-<li>All lengths are measured in millimeters unless noted otherwise.</li>
-<li>Front cogs and rear cogs are each encoded as a list of integers
-representing the number of teeth on the cogs,
-e.g. <code class="docutils literal"><span class="pre">front_cogs</span> <span class="pre">=</span> <span class="pre">[28,</span> <span class="pre">42]</span></code>.</li>
-<li>Wheel diameter is the diameter of the wheel with the tire on and inflated.</li>
-<li>Center to flange measurements are encoded by a dictionary with
-center-to-left-flange and center-to-right-flange measurements listed
-under <code class="docutils literal"><span class="pre">'left'</span></code> and <code class="docutils literal"><span class="pre">'right'</span></code> keys, respectively.
-Similarly with flange diameter measurements.
-For example <code class="docutils literal"><span class="pre">center_to_flange</span> <span class="pre">=</span> <span class="pre">{'left':</span> <span class="pre">37.1,</span> <span class="pre">'right':</span> <span class="pre">20.9}</span></code> and
-<code class="docutils literal"><span class="pre">flange_diameter</span> <span class="pre">=</span> <span class="pre">{'left':</span> <span class="pre">45,</span> <span class="pre">'right':</span> <span class="pre">45}</span></code></li>
+<li>All lengths are measured in millimeters, unless noted otherwise</li>
+<li>All angles are measured in degrees, unless noted otherwise</li>
 </ul>
-<span class="target" id="module-bicycle_calculator.bicycle"></span><dl class="class">
-<dt id="bicycle_calculator.bicycle.Bicycle">
-<em class="property">class </em><code class="descclassname">bicycle_calculator.bicycle.</code><code class="descname">Bicycle</code><span class="sig-paren">(</span><em>name=None</em>, <em>head_tube_angle=None</em>, <em>fork_rake=None</em>, <em>crank_length=None</em>, <em>front_cogs=None</em>, <em>rear_cogs=None</em>, <em>front_wheel=None</em>, <em>rear_wheel=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.Bicycle" title="Permalink to this definition">¶</a></dt>
+<dl class="class">
+<dt id="bicycle_calculator.bicycle_calculator.Bicycle">
+<em class="property">class </em><code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">Bicycle</code><span class="sig-paren">(</span><em>name=None</em>, <em>head_tube_angle=None</em>, <em>fork_rake=None</em>, <em>crank_length=None</em>, <em>front_cogs=None</em>, <em>rear_cogs=None</em>, <em>front_wheel=None</em>, <em>rear_wheel=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.Bicycle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Represents a bicycle.</p>
-<dl class="method">
-<dt id="bicycle_calculator.bicycle.Bicycle.cadence_to_speeds">
-<code class="descname">cadence_to_speeds</code><span class="sig-paren">(</span><em>cadence</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.Bicycle.cadence_to_speeds" title="Permalink to this definition">¶</a></dt>
-<dd><p>Call the corresponding module function using this 
-bicycle&#8217;s attributes as inputs.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="bicycle_calculator.bicycle.Bicycle.derailer_capacity">
-<code class="descname">derailer_capacity</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.Bicycle.derailer_capacity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Call the corresponding module function using this 
-bicycle&#8217;s attributes as inputs.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="bicycle_calculator.bicycle.Bicycle.gain_ratios">
-<code class="descname">gain_ratios</code><span class="sig-paren">(</span><em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.Bicycle.gain_ratios" title="Permalink to this definition">¶</a></dt>
-<dd><p>Call the corresponding module function using this 
-bicycle&#8217;s attributes as inputs.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="bicycle_calculator.bicycle.Bicycle.gear_ratios">
-<code class="descname">gear_ratios</code><span class="sig-paren">(</span><em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.Bicycle.gear_ratios" title="Permalink to this definition">¶</a></dt>
-<dd><p>Call the corresponding module function using this 
-bicycle&#8217;s attributes as inputs.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="bicycle_calculator.bicycle.Bicycle.num_skid_patches">
-<code class="descname">num_skid_patches</code><span class="sig-paren">(</span><em>ambidextrous=False</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.Bicycle.num_skid_patches" title="Permalink to this definition">¶</a></dt>
-<dd><p>Call the corresponding module function using this 
-bicycle&#8217;s attributes as inputs.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="bicycle_calculator.bicycle.Bicycle.speed_to_cadences">
-<code class="descname">speed_to_cadences</code><span class="sig-paren">(</span><em>speed</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.Bicycle.speed_to_cadences" title="Permalink to this definition">¶</a></dt>
-<dd><p>Call the corresponding module function using this 
-bicycle&#8217;s attributes as inputs.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="bicycle_calculator.bicycle.Bicycle.trail">
-<code class="descname">trail</code><span class="sig-paren">(</span><em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.Bicycle.trail" title="Permalink to this definition">¶</a></dt>
-<dd><p>Call the corresponding module function using this 
-bicycle&#8217;s attributes as inputs.</p>
-</dd></dl>
-
+<p>Attributes:</p>
+<ul class="simple">
+<li>name</li>
+<li>front_cogs: list of integers representing the number of teeth on 
+the cogs, e.g. <code class="docutils literal"><span class="pre">front_cogs</span> <span class="pre">=</span> <span class="pre">[28,</span> <span class="pre">42]</span></code></li>
+<li>rear_cogs: list of integers representing the number of teeth on 
+the cogs, e.g. <code class="docutils literal"><span class="pre">rear_cogs</span> <span class="pre">=</span> <span class="pre">[10,</span> <span class="pre">15,</span> <span class="pre">20,</span> <span class="pre">25,</span> <span class="pre">30]</span></code></li>
+<li>head_tube_angle</li>
+<li>fork_rake</li>
+<li>front_wheel: a Wheel instance</li>
+<li>rear_wheel: a Wheel instance</li>
+</ul>
 </dd></dl>
 
 <dl class="class">
-<dt id="bicycle_calculator.bicycle.Wheel">
-<em class="property">class </em><code class="descclassname">bicycle_calculator.bicycle.</code><code class="descname">Wheel</code><span class="sig-paren">(</span><em>name=None</em>, <em>bsd=None</em>, <em>erd=None</em>, <em>tire_width=None</em>, <em>diameter=None</em>, <em>center_to_flange=None</em>, <em>flange_diameter=None</em>, <em>spoke_hole_diameter=2.6</em>, <em>num_spokes=None</em>, <em>num_crosses=None</em>, <em>offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.Wheel" title="Permalink to this definition">¶</a></dt>
+<dt id="bicycle_calculator.bicycle_calculator.Wheel">
+<em class="property">class </em><code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">Wheel</code><span class="sig-paren">(</span><em>name=None</em>, <em>bsd=None</em>, <em>erd=None</em>, <em>tire_width=None</em>, <em>diameter=None</em>, <em>center_to_flange=None</em>, <em>flange_diameter=None</em>, <em>spoke_hole_diameter=2.6</em>, <em>num_spokes=None</em>, <em>num_crosses=3</em>, <em>offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.Wheel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Represents a bicycle wheel.</p>
-<dl class="method">
-<dt id="bicycle_calculator.bicycle.Wheel.approx_diameter">
-<code class="descname">approx_diameter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.Wheel.approx_diameter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Call <a class="reference internal" href="#bicycle_calculator.bicycle.approx_wheel_diameter" title="bicycle_calculator.bicycle.approx_wheel_diameter"><code class="xref py py-func docutils literal"><span class="pre">approx_wheel_diameter()</span></code></a> using this 
-wheel&#8217;s attributes as inputs.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="bicycle_calculator.bicycle.Wheel.spoke_length">
-<code class="descname">spoke_length</code><span class="sig-paren">(</span><em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.Wheel.spoke_length" title="Permalink to this definition">¶</a></dt>
-<dd><p>Call the corresponding module function using this 
-wheel&#8217;s attributes as inputs.</p>
-</dd></dl>
-
+<p>Attributes:</p>
+<ul class="simple">
+<li>name</li>
+<li>bsd: bead seat diameter, e.g. 684 for a 650b rim</li>
+<li>erd: effective rim diameter, e.g. 650 for a 650b rim</li>
+<li>tire_width</li>
+<li>diameter: diameter of the wheel with the tire on and inflated</li>
+<li>center_to_flange: dictionary of the form <code class="docutils literal"><span class="pre">{'left':</span> <span class="pre">37.1,</span> <span class="pre">'right':</span> <span class="pre">20.9}</span></code></li>
+<li>flange_diameter: dictionary of the form <code class="docutils literal"><span class="pre">{'left':</span> <span class="pre">45,</span> <span class="pre">'right':</span> <span class="pre">45}</span></code></li>
+<li>spoke_hole_diameter</li>
+<li>num_spokes</li>
+<li>num_crosses: number of crosses in spoke pattern, e.g. 3</li>
+<li>offset: for off-center rims</li>
+</ul>
 </dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle.approx_wheel_diameter">
-<code class="descclassname">bicycle_calculator.bicycle.</code><code class="descname">approx_wheel_diameter</code><span class="sig-paren">(</span><em>bsd</em>, <em>tire_width</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.approx_wheel_diameter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the approximate wheel diameter given the a bead seat diameter
-for a wheel and a tire width.
-Return the bead seat diameter plus twice the tire width.</p>
+<dt id="bicycle_calculator.bicycle_calculator.approx_diameter">
+<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">approx_diameter</code><span class="sig-paren">(</span><em>wheel</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.approx_diameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the approximate diameter of the given wheel, 
+which is the bead seat diameter plus twice the tire width.</p>
+<p>Assume the following wheel attributes are non-null and non-empty:</p>
+<ul class="simple">
+<li>bsd</li>
+<li>tire_width</li>
+</ul>
+<p>Raise a <code class="docutils literal"><span class="pre">ValueError</span></code>, if that is not the case.</p>
 <p>EXAMPLES:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">approx_wheel_diameter</span><span class="p">(</span><span class="mi">584</span><span class="p">,</span> <span class="mi">42</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">Wheel</span><span class="p">(</span><span class="n">bsd</span><span class="o">=</span><span class="mi">584</span><span class="p">,</span> <span class="n">tire_width</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">approx_diameter</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
 <span class="go">668</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle.cadence_to_speeds">
-<code class="descclassname">bicycle_calculator.bicycle.</code><code class="descname">cadence_to_speeds</code><span class="sig-paren">(</span><em>cadence</em>, <em>front_cogs</em>, <em>rear_cogs</em>, <em>crank_length</em>, <em>wheel_diameter</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.cadence_to_speeds" title="Permalink to this definition">¶</a></dt>
+<dt id="bicycle_calculator.bicycle_calculator.cadence_to_speeds">
+<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">cadence_to_speeds</code><span class="sig-paren">(</span><em>bicycle</em>, <em>cadence</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.cadence_to_speeds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return speeds in kilometers per hour. 
 Cadence is measured in hertz (revolutions/second).</p>
+<p>Assume the following bicycle attributes are non-null and non-empty:</p>
+<ul class="simple">
+<li>front_cogs</li>
+<li>rear_cogs</li>
+<li>crank_length</li>
+<li>rear_wheel</li>
+</ul>
+<p>Raise a <code class="docutils literal"><span class="pre">ValueError</span></code>, if that is not the case.</p>
 <p>EXAMPLES:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cadence_to_speeds</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">40</span><span class="p">],</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">Wheel</span><span class="p">(</span><span class="n">diameter</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">Bicycle</span><span class="p">(</span><span class="n">front_cogs</span><span class="o">=</span><span class="p">[</span><span class="mi">40</span><span class="p">],</span> <span class="n">rear_cogs</span><span class="o">=</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="n">crank_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">rear_wheel</span><span class="o">=</span><span class="n">w</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cadence_to_speeds</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">{(40, 30): 18.1, (40, 20): 27.1}</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle.derailer_capacity">
-<code class="descclassname">bicycle_calculator.bicycle.</code><code class="descname">derailer_capacity</code><span class="sig-paren">(</span><em>front_cogs</em>, <em>rear_cogs</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.derailer_capacity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the derailer capacity needed to accommodate the given cog set.</p>
+<dt id="bicycle_calculator.bicycle_calculator.check_attrs">
+<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">check_attrs</code><span class="sig-paren">(</span><em>obj</em>, <em>*attrs</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.check_attrs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="bicycle_calculator.bicycle_calculator.derailer_capacity">
+<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">derailer_capacity</code><span class="sig-paren">(</span><em>bicycle</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.derailer_capacity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the derailer capacity needed to accommodate the cog set
+on the given Bicycle object.</p>
+<p>Assume the following bicycle attributes are non-null and non-empty:</p>
+<ul class="simple">
+<li>front_cogs</li>
+<li>rear_cogs</li>
+</ul>
+<p>Raise a <code class="docutils literal"><span class="pre">ValueError</span></code>, if that is not the case.</p>
 <p>EXAMPLES:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">derailer_capacity</span><span class="p">([</span><span class="mi">26</span><span class="p">,</span> <span class="mi">36</span><span class="p">],</span> <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">32</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">Bicycle</span><span class="p">(</span><span class="n">front_cogs</span><span class="o">=</span><span class="p">[</span><span class="mi">26</span><span class="p">,</span> <span class="mi">36</span><span class="p">],</span> <span class="n">rear_cogs</span><span class="o">=</span><span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">32</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">derailer_capacity</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
 <span class="go">30</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle.gain_ratios">
-<code class="descclassname">bicycle_calculator.bicycle.</code><code class="descname">gain_ratios</code><span class="sig-paren">(</span><em>front_cogs</em>, <em>rear_cogs</em>, <em>crank_length</em>, <em>wheel_diameter</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.gain_ratios" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the gain ratios for the given parameters.</p>
+<dt id="bicycle_calculator.bicycle_calculator.gain_ratios">
+<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">gain_ratios</code><span class="sig-paren">(</span><em>bicycle</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.gain_ratios" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the gain ratios for the given Bicycle object.</p>
+<p>Assume the following bicycle attributes are non-null and non-empty:</p>
+<ul class="simple">
+<li>front_cogs</li>
+<li>rear_cogs</li>
+<li>crank_length</li>
+<li>rear_wheel</li>
+</ul>
+<p>Raise a <code class="docutils literal"><span class="pre">ValueError</span></code>, if that is not the case.</p>
 <p>EXAMPLES:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">gain_ratios</span><span class="p">([</span><span class="mi">40</span><span class="p">],</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">Wheel</span><span class="p">(</span><span class="n">diameter</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">Bicycle</span><span class="p">(</span><span class="n">front_cogs</span><span class="o">=</span><span class="p">[</span><span class="mi">40</span><span class="p">],</span> <span class="n">rear_cogs</span><span class="o">=</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="n">crank_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">rear_wheel</span><span class="o">=</span><span class="n">w</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gain_ratios</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">{(40, 30): 4.0, (40, 20): 6.0}</span>
 </pre></div>
 </div>
@@ -187,27 +179,40 @@ Cadence is measured in hertz (revolutions/second).</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle.gear_ratios">
-<code class="descclassname">bicycle_calculator.bicycle.</code><code class="descname">gear_ratios</code><span class="sig-paren">(</span><em>front_cogs</em>, <em>rear_cogs</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.gear_ratios" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the gear ratios for the given cogs.</p>
+<dt id="bicycle_calculator.bicycle_calculator.gear_ratios">
+<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">gear_ratios</code><span class="sig-paren">(</span><em>bicycle</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.gear_ratios" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the gear ratios for the given Bicycle object.</p>
+<p>Assume the following bicycle attributes are non-null and non-empty:</p>
+<ul class="simple">
+<li>front_cogs</li>
+<li>rear_cogs</li>
+</ul>
+<p>Raise a <code class="docutils literal"><span class="pre">ValueError</span></code>, if that is not the case.</p>
 <p>EXAMPLES:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">gear_ratios</span><span class="p">([</span><span class="mi">40</span><span class="p">],</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">Bicycle</span><span class="p">(</span><span class="n">front_cogs</span><span class="o">=</span><span class="p">[</span><span class="mi">40</span><span class="p">],</span> <span class="n">rear_cogs</span><span class="o">=</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gear_ratios</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
 <span class="go">{(40, 30): 1.3333333333333333, (40, 20): 2.0}</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle.num_skid_patches">
-<code class="descclassname">bicycle_calculator.bicycle.</code><code class="descname">num_skid_patches</code><span class="sig-paren">(</span><em>front_cogs</em>, <em>rear_cogs</em>, <em>ambidextrous=False</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.num_skid_patches" title="Permalink to this definition">¶</a></dt>
+<dt id="bicycle_calculator.bicycle_calculator.num_skid_patches">
+<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">num_skid_patches</code><span class="sig-paren">(</span><em>bicycle</em>, <em>ambidextrous=False</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.num_skid_patches" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a dictionary of the form (front cog, rear cog) -&gt;
 number of skid patches made on the rear tire of a fixed gear 
 bicycle with the given front cog and rear cog.</p>
+<p>Assume the following bicycle attributes are non-null and non-empty:</p>
+<ul class="simple">
+<li>front_cogs</li>
+<li>rear_cogs</li>
+</ul>
+<p>Raise a <code class="docutils literal"><span class="pre">ValueError</span></code>, if that is not the case.</p>
 <p>EXAMPLES:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">num_skid_patches</span><span class="p">([</span><span class="mi">50</span><span class="p">],</span> <span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="n">ambidextrous</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">Bicycle</span><span class="p">(</span><span class="n">front_cogs</span><span class="o">=</span><span class="p">[</span><span class="mi">50</span><span class="p">],</span> <span class="n">rear_cogs</span><span class="o">=</span><span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">num_skid_patches</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">ambidextrous</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="go">{(50, 30): 3.0, (50, 25): 1.0}</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">num_skid_patches</span><span class="p">([</span><span class="mi">50</span><span class="p">],</span> <span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="n">ambidextrous</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">num_skid_patches</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">ambidextrous</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="go">{(50, 30): 6.0, (50, 25): 1.0}</span>
 </pre></div>
 </div>
@@ -226,26 +231,46 @@ Then</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle.speed_to_cadences">
-<code class="descclassname">bicycle_calculator.bicycle.</code><code class="descname">speed_to_cadences</code><span class="sig-paren">(</span><em>speed</em>, <em>front_cogs</em>, <em>rear_cogs</em>, <em>crank_length</em>, <em>wheel_diameter</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.speed_to_cadences" title="Permalink to this definition">¶</a></dt>
+<dt id="bicycle_calculator.bicycle_calculator.speed_to_cadences">
+<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">speed_to_cadences</code><span class="sig-paren">(</span><em>bicycle</em>, <em>speed</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.speed_to_cadences" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return cadences in hertz (revolutions per second). 
 Speed is measured in kilometers per hour.</p>
+<p>Assume the following bicycle attributes are non-null and non-empty:</p>
+<ul class="simple">
+<li>front_cogs</li>
+<li>rear_cogs</li>
+<li>crank_length</li>
+<li>rear_wheel</li>
+</ul>
+<p>Raise a <code class="docutils literal"><span class="pre">ValueError</span></code>, if that is not the case.</p>
 <p>EXAMPLES:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">speed_to_cadences</span><span class="p">(</span><span class="mf">18.1</span><span class="p">,</span> <span class="p">[</span><span class="mi">40</span><span class="p">],</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">Wheel</span><span class="p">(</span><span class="n">diameter</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">Bicycle</span><span class="p">(</span><span class="n">front_cogs</span><span class="o">=</span><span class="p">[</span><span class="mi">40</span><span class="p">],</span> <span class="n">rear_cogs</span><span class="o">=</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span> <span class="n">crank_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">rear_wheel</span><span class="o">=</span><span class="n">w</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">speed_to_cadences</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="mf">18.1</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">{(40, 30): 2.0, (40, 20): 1.3}</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle.spoke_length">
-<code class="descclassname">bicycle_calculator.bicycle.</code><code class="descname">spoke_length</code><span class="sig-paren">(</span><em>center_to_flange</em>, <em>flange_diameter</em>, <em>spoke_hole_diameter</em>, <em>erd</em>, <em>offset</em>, <em>num_spokes</em>, <em>num_crosses</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.spoke_length" title="Permalink to this definition">¶</a></dt>
+<dt id="bicycle_calculator.bicycle_calculator.spoke_length">
+<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">spoke_length</code><span class="sig-paren">(</span><em>wheel</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.spoke_length" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the left (nondrive side) and right (drive side) spoke lengths
-for a bicycle wheel with the given parameters.</p>
+for the given wheel.</p>
+<p>Assume the following bicycle attributes are non-null and non-empty:</p>
+<ul class="simple">
+<li>center_to_flange</li>
+<li>flange_diameter</li>
+<li>spoke_hole_diameter</li>
+<li>erd</li>
+<li>offset</li>
+<li>num_spokes</li>
+<li>num_crosses</li>
+</ul>
+<p>Raise a <code class="docutils literal"><span class="pre">ValueError</span></code>, if that is not the case.</p>
 <p>EXAMPLES:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">center_to_flange</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;left&#39;</span><span class="p">:</span> <span class="mf">37.1</span><span class="p">,</span> <span class="s">&#39;right&#39;</span><span class="p">:</span> <span class="mf">20.9</span><span class="p">}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">flange_diameter</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;left&#39;</span><span class="p">:</span> <span class="mi">45</span><span class="p">,</span> <span class="s">&#39;right&#39;</span><span class="p">:</span> <span class="mi">45</span><span class="p">}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">spoke_length</span><span class="p">(</span><span class="n">center_to_flange</span><span class="p">,</span> <span class="n">flange_diameter</span><span class="p">,</span> <span class="mf">2.6</span><span class="p">,</span> <span class="mi">560</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">Wheel</span><span class="p">(</span><span class="n">center_to_flange</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;left&#39;</span><span class="p">:</span> <span class="mf">37.1</span><span class="p">,</span> <span class="s">&#39;right&#39;</span><span class="p">:</span> <span class="mf">20.9</span><span class="p">},</span> <span class="n">flange_diameter</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;left&#39;</span><span class="p">:</span> <span class="mi">45</span><span class="p">,</span> <span class="s">&#39;right&#39;</span><span class="p">:</span> <span class="mi">45</span><span class="p">},</span> <span class="n">erd</span><span class="o">=</span><span class="mi">560</span><span class="p">,</span> <span class="n">spoke_hole_diameter</span><span class="o">=</span><span class="mf">2.6</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">num_spokes</span><span class="o">=</span><span class="mi">36</span><span class="p">,</span> <span class="n">num_crosses</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spoke_length</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">{&#39;right&#39;: 269.2, &#39;left&#39;: 270.3}</span>
 </pre></div>
 </div>
@@ -256,12 +281,21 @@ for a bicycle wheel with the given parameters.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle.trail">
-<code class="descclassname">bicycle_calculator.bicycle.</code><code class="descname">trail</code><span class="sig-paren">(</span><em>head_tube_angle</em>, <em>fork_rake</em>, <em>wheel_diameter</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle.trail" title="Permalink to this definition">¶</a></dt>
+<dt id="bicycle_calculator.bicycle_calculator.trail">
+<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">trail</code><span class="sig-paren">(</span><em>bicycle</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.trail" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the tuple (trail, mechanical trail, wheel flop) 
 for a bicycle with the given parameters.</p>
+<p>Assume the following bicycle attributes are non-null and non-empty:</p>
+<ul class="simple">
+<li>head_tube_angle</li>
+<li>fork_rake</li>
+<li>front_wheel</li>
+</ul>
+<p>Raise a <code class="docutils literal"><span class="pre">ValueError</span></code>, if that is not the case.</p>
 <p>EXAMPLES:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">trail</span><span class="p">(</span><span class="mi">73</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">700</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">Wheel</span><span class="p">(</span><span class="n">diameter</span><span class="o">=</span><span class="mi">700</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">Bicycle</span><span class="p">(</span><span class="n">head_tube_angle</span><span class="o">=</span><span class="mi">73</span><span class="p">,</span> <span class="n">fork_rake</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">front_wheel</span><span class="o">=</span><span class="n">w</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trail</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">digits</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="go">(40.1, 38.3, 11.2)</span>
 </pre></div>
 </div>
@@ -271,7 +305,6 @@ for a bicycle with the given parameters.</p>
 </ul>
 </dd></dl>
 
-</div>
 </div>
 </div>
 </div>
@@ -293,8 +326,8 @@ for a bicycle with the given parameters.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html#document-index">Table Of Contents</a></h3>
   <ul>
-<li class="toctree-l1"><a class="reference internal" href="index.html#document-bicycle_calculator">bicycle_calculator package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="index.html#bicycle-calculator-bicycle-module">bicycle_calculator.bicycle module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#document-bicycle_calculator">bicycle_calculator Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="index.html#module-bicycle_calculator.bicycle_calculator">bicycle_calculator Module</a></li>
 </ul>
 </li>
 </ul>
