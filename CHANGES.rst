@@ -1,8 +1,8 @@
 Changes
 *******************
 
-v2.1.0
-----------------
+v2.1.0, 2016-04-13
+-------------------
 - Renamed main module
 - Created copy method
 
