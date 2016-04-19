@@ -2,7 +2,7 @@
 CHANGES.rst
 README.rst
 setup.py
-bicycle_calculator/__init__.py
-bicycle_calculator/bicycle_calculator.py
+bicyclator/__init__.py
+bicyclator/main.py
 tests/__init__.py
-tests/test_bicycle.py
+tests/test_main.py

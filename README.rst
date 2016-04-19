@@ -1,16 +1,16 @@
-Bicycle Calculator
+Bicyclator
 *******************
-A Python 3.4 program for calculating various bicycle-related quantities, such as gain ratios, trail, and spoke length.
+A Python 3.4 bicycle calculator for calculating quantities such as gain ratio, trail, and spoke length.
 
 
 Installation
 -------------
-``pip install bicycle_calculator``
+``pip install bicyclator``
 
 
 Documentation
 --------------
-In ``docs`` and on RawGit `here <https://rawgit.com/araichev/bicycle_calculator/master/docs/_build/singlehtml/index.html>`_.
+In ``docs`` and on RawGit `here <https://rawgit.com/araichev/bicyclator/master/docs/_build/singlehtml/index.html>`_.
 
 
 Notes

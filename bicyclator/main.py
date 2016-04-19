@@ -66,6 +66,9 @@ class Bicycle(object):
         return s[:-1]
 
     def copy(self):
+        """
+        Return a copy of this Bicycle.
+        """
         return deepcopy(self)
 
 
@@ -121,6 +124,9 @@ class Wheel(object):
         return s[:-1]
 
     def copy(self):
+        """
+        Return a copy of this Wheel.
+        """
         return deepcopy(self)
 
 

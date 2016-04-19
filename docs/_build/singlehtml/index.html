@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Bicycle Calculator 2 documentation</title>
+    <title>Bicycle Calculator 3.0.0 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '2',
+        VERSION:     '3.0.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -36,21 +36,21 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="bicycle-calculator-release-documentation">
-<h1>Bicycle Calculator 2 Documentation<a class="headerlink" href="#bicycle-calculator-release-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="bicyclator-release-documentation">
+<h1>Bicyclator 3.0.0 Documentation<a class="headerlink" href="#bicyclator-release-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
-<span id="document-bicycle_calculator"></span><div class="section" id="bicycle-calculator-package">
-<h2>bicycle_calculator Package<a class="headerlink" href="#bicycle-calculator-package" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="module-bicycle_calculator.bicycle_calculator">
-<span id="bicycle-calculator-module"></span><h3>bicycle_calculator Module<a class="headerlink" href="#module-bicycle_calculator.bicycle_calculator" title="Permalink to this headline">¶</a></h3>
+<span id="document-bicyclator"></span><div class="section" id="bicyclator-package">
+<h2>bicyclator Package<a class="headerlink" href="#bicyclator-package" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-bicyclator.main">
+<span id="main-module"></span><h3>main Module<a class="headerlink" href="#module-bicyclator.main" title="Permalink to this headline">¶</a></h3>
 <p>Conventions:</p>
 <ul class="simple">
 <li>All lengths are measured in millimeters, unless noted otherwise</li>
 <li>All angles are measured in degrees, unless noted otherwise</li>
 </ul>
 <dl class="class">
-<dt id="bicycle_calculator.bicycle_calculator.Bicycle">
-<em class="property">class </em><code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">Bicycle</code><span class="sig-paren">(</span><em>name=None</em>, <em>head_tube_angle=None</em>, <em>fork_rake=None</em>, <em>crank_length=None</em>, <em>front_cogs=None</em>, <em>rear_cogs=None</em>, <em>front_wheel=None</em>, <em>rear_wheel=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.Bicycle" title="Permalink to this definition">¶</a></dt>
+<dt id="bicyclator.main.Bicycle">
+<em class="property">class </em><code class="descclassname">bicyclator.main.</code><code class="descname">Bicycle</code><span class="sig-paren">(</span><em>name=None</em>, <em>head_tube_angle=None</em>, <em>fork_rake=None</em>, <em>crank_length=None</em>, <em>front_cogs=None</em>, <em>rear_cogs=None</em>, <em>front_wheel=None</em>, <em>rear_wheel=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicyclator.main.Bicycle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Represents a bicycle.</p>
 <p>Attributes:</p>
@@ -65,11 +65,17 @@ the cogs, e.g. <code class="docutils literal"><span class="pre">rear_cogs</span>
 <li>front_wheel: a Wheel instance</li>
 <li>rear_wheel: a Wheel instance</li>
 </ul>
+<dl class="method">
+<dt id="bicyclator.main.Bicycle.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bicyclator.main.Bicycle.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy of this Bicycle.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="class">
-<dt id="bicycle_calculator.bicycle_calculator.Wheel">
-<em class="property">class </em><code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">Wheel</code><span class="sig-paren">(</span><em>name=None</em>, <em>bsd=None</em>, <em>erd=None</em>, <em>tire_width=None</em>, <em>diameter=None</em>, <em>center_to_flange=None</em>, <em>flange_diameter=None</em>, <em>spoke_hole_diameter=2.6</em>, <em>num_spokes=None</em>, <em>num_crosses=3</em>, <em>offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.Wheel" title="Permalink to this definition">¶</a></dt>
+<dt id="bicyclator.main.Wheel">
+<em class="property">class </em><code class="descclassname">bicyclator.main.</code><code class="descname">Wheel</code><span class="sig-paren">(</span><em>name=None</em>, <em>bsd=None</em>, <em>erd=None</em>, <em>tire_width=None</em>, <em>diameter=None</em>, <em>center_to_flange=None</em>, <em>flange_diameter=None</em>, <em>spoke_hole_diameter=2.6</em>, <em>num_spokes=None</em>, <em>num_crosses=3</em>, <em>offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#bicyclator.main.Wheel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Represents a bicycle wheel.</p>
 <p>Attributes:</p>
@@ -86,11 +92,17 @@ the cogs, e.g. <code class="docutils literal"><span class="pre">rear_cogs</span>
 <li>num_crosses: number of crosses in spoke pattern, e.g. 3</li>
 <li>offset: for off-center rims</li>
 </ul>
+<dl class="method">
+<dt id="bicyclator.main.Wheel.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bicyclator.main.Wheel.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a copy of this Wheel.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle_calculator.approx_diameter">
-<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">approx_diameter</code><span class="sig-paren">(</span><em>wheel</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.approx_diameter" title="Permalink to this definition">¶</a></dt>
+<dt id="bicyclator.main.approx_diameter">
+<code class="descclassname">bicyclator.main.</code><code class="descname">approx_diameter</code><span class="sig-paren">(</span><em>wheel</em><span class="sig-paren">)</span><a class="headerlink" href="#bicyclator.main.approx_diameter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the approximate diameter of the given wheel, 
 which is the bead seat diameter plus twice the tire width.</p>
 <p>Assume the following wheel attributes are non-null and non-empty:</p>
@@ -108,8 +120,8 @@ which is the bead seat diameter plus twice the tire width.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle_calculator.cadence_to_speeds">
-<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">cadence_to_speeds</code><span class="sig-paren">(</span><em>bicycle</em>, <em>cadence</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.cadence_to_speeds" title="Permalink to this definition">¶</a></dt>
+<dt id="bicyclator.main.cadence_to_speeds">
+<code class="descclassname">bicyclator.main.</code><code class="descname">cadence_to_speeds</code><span class="sig-paren">(</span><em>bicycle</em>, <em>cadence</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicyclator.main.cadence_to_speeds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return speeds in kilometers per hour. 
 Cadence is measured in hertz (revolutions/second).</p>
 <p>Assume the following bicycle attributes are non-null and non-empty:</p>
@@ -130,13 +142,13 @@ Cadence is measured in hertz (revolutions/second).</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle_calculator.check_attrs">
-<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">check_attrs</code><span class="sig-paren">(</span><em>obj</em>, <em>*attrs</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.check_attrs" title="Permalink to this definition">¶</a></dt>
+<dt id="bicyclator.main.check_attrs">
+<code class="descclassname">bicyclator.main.</code><code class="descname">check_attrs</code><span class="sig-paren">(</span><em>obj</em>, <em>*attrs</em><span class="sig-paren">)</span><a class="headerlink" href="#bicyclator.main.check_attrs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle_calculator.derailer_capacity">
-<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">derailer_capacity</code><span class="sig-paren">(</span><em>bicycle</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.derailer_capacity" title="Permalink to this definition">¶</a></dt>
+<dt id="bicyclator.main.derailer_capacity">
+<code class="descclassname">bicyclator.main.</code><code class="descname">derailer_capacity</code><span class="sig-paren">(</span><em>bicycle</em><span class="sig-paren">)</span><a class="headerlink" href="#bicyclator.main.derailer_capacity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the derailer capacity needed to accommodate the cog set
 on the given Bicycle object.</p>
 <p>Assume the following bicycle attributes are non-null and non-empty:</p>
@@ -154,8 +166,8 @@ on the given Bicycle object.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle_calculator.gain_ratios">
-<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">gain_ratios</code><span class="sig-paren">(</span><em>bicycle</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.gain_ratios" title="Permalink to this definition">¶</a></dt>
+<dt id="bicyclator.main.gain_ratios">
+<code class="descclassname">bicyclator.main.</code><code class="descname">gain_ratios</code><span class="sig-paren">(</span><em>bicycle</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicyclator.main.gain_ratios" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the gain ratios for the given Bicycle object.</p>
 <p>Assume the following bicycle attributes are non-null and non-empty:</p>
 <ul class="simple">
@@ -179,8 +191,8 @@ on the given Bicycle object.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle_calculator.gear_ratios">
-<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">gear_ratios</code><span class="sig-paren">(</span><em>bicycle</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.gear_ratios" title="Permalink to this definition">¶</a></dt>
+<dt id="bicyclator.main.gear_ratios">
+<code class="descclassname">bicyclator.main.</code><code class="descname">gear_ratios</code><span class="sig-paren">(</span><em>bicycle</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicyclator.main.gear_ratios" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the gear ratios for the given Bicycle object.</p>
 <p>Assume the following bicycle attributes are non-null and non-empty:</p>
 <ul class="simple">
@@ -197,8 +209,8 @@ on the given Bicycle object.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle_calculator.num_skid_patches">
-<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">num_skid_patches</code><span class="sig-paren">(</span><em>bicycle</em>, <em>ambidextrous=False</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.num_skid_patches" title="Permalink to this definition">¶</a></dt>
+<dt id="bicyclator.main.num_skid_patches">
+<code class="descclassname">bicyclator.main.</code><code class="descname">num_skid_patches</code><span class="sig-paren">(</span><em>bicycle</em>, <em>ambidextrous=False</em><span class="sig-paren">)</span><a class="headerlink" href="#bicyclator.main.num_skid_patches" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a dictionary of the form (front cog, rear cog) -&gt;
 number of skid patches made on the rear tire of a fixed gear 
 bicycle with the given front cog and rear cog.</p>
@@ -231,8 +243,8 @@ Then</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle_calculator.speed_to_cadences">
-<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">speed_to_cadences</code><span class="sig-paren">(</span><em>bicycle</em>, <em>speed</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.speed_to_cadences" title="Permalink to this definition">¶</a></dt>
+<dt id="bicyclator.main.speed_to_cadences">
+<code class="descclassname">bicyclator.main.</code><code class="descname">speed_to_cadences</code><span class="sig-paren">(</span><em>bicycle</em>, <em>speed</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicyclator.main.speed_to_cadences" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return cadences in hertz (revolutions per second). 
 Speed is measured in kilometers per hour.</p>
 <p>Assume the following bicycle attributes are non-null and non-empty:</p>
@@ -253,8 +265,8 @@ Speed is measured in kilometers per hour.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle_calculator.spoke_length">
-<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">spoke_length</code><span class="sig-paren">(</span><em>wheel</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.spoke_length" title="Permalink to this definition">¶</a></dt>
+<dt id="bicyclator.main.spoke_length">
+<code class="descclassname">bicyclator.main.</code><code class="descname">spoke_length</code><span class="sig-paren">(</span><em>wheel</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicyclator.main.spoke_length" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the left (nondrive side) and right (drive side) spoke lengths
 for the given wheel.</p>
 <p>Assume the following bicycle attributes are non-null and non-empty:</p>
@@ -281,8 +293,8 @@ for the given wheel.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="bicycle_calculator.bicycle_calculator.trail">
-<code class="descclassname">bicycle_calculator.bicycle_calculator.</code><code class="descname">trail</code><span class="sig-paren">(</span><em>bicycle</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicycle_calculator.bicycle_calculator.trail" title="Permalink to this definition">¶</a></dt>
+<dt id="bicyclator.main.trail">
+<code class="descclassname">bicyclator.main.</code><code class="descname">trail</code><span class="sig-paren">(</span><em>bicycle</em>, <em>digits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bicyclator.main.trail" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the tuple (trail, mechanical trail, wheel flop) 
 for a bicycle with the given parameters.</p>
 <p>Assume the following bicycle attributes are non-null and non-empty:</p>
@@ -326,8 +338,8 @@ for a bicycle with the given parameters.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html#document-index">Table Of Contents</a></h3>
   <ul>
-<li class="toctree-l1"><a class="reference internal" href="index.html#document-bicycle_calculator">bicycle_calculator Package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="index.html#module-bicycle_calculator.bicycle_calculator">bicycle_calculator Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html#document-bicyclator">bicyclator Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="index.html#module-bicyclator.main">main Module</a></li>
 </ul>
 </li>
 </ul>
