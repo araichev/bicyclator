@@ -5,7 +5,7 @@ A Python 3.4 bicycle calculator for calculating quantities such as gain ratio, t
 
 Installation
 -------------
-``pip install bicyclator``
+``pip install https://github.com/araichev/bicyclator``
 
 
 Documentation
