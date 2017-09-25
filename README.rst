@@ -5,7 +5,7 @@ A Python 3.4 bicycle calculator for calculating quantities such as gain ratio, t
 
 Installation
 -------------
-``pip install https://github.com/araichev/bicyclator``
+``pip install git+https://github.com/araichev/bicyclator``
 
 
 Documentation
@@ -15,7 +15,5 @@ In ``docs`` and on RawGit `here <https://rawgit.com/araichev/bicyclator/master/d
 
 Notes
 -------
-- Development status Alpha
-- This project uses semantic versioning (major.minor.micro), where each breaking feature or API change is considered a major release.
-  So the version code reflects the project's change history, rather than its development status.
-  In particular, a high major version number, does not imply a mature development status. 
+- Development status is Alpha
+- This project uses semantic versioning
