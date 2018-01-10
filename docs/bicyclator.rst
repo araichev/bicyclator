@@ -1,11 +1,11 @@
-bicycle_calculator Package
+bicyclator Package
 ****************************
 
 
-bicycle_calculator Module
+main Module
 ===========================
 
-.. automodule:: bicycle_calculator.bicycle_calculator
+.. automodule:: bicyclator.main
     :members:
     :undoc-members:
     :show-inheritance:

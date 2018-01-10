@@ -3,13 +3,13 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Bicycle Calculator |release| Documentation
+Bicyclator |release| Documentation
 ===========================================
 
 .. toctree::
    :maxdepth: 2
 
-   bicycle_calculator
+   bicyclator
 
 
 Indices and tables

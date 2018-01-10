@@ -4,11 +4,10 @@ Conventions:
 - All lengths are measured in millimeters, unless noted otherwise
 - All angles are measured in degrees, unless noted otherwise
 """
-
-import functools
 from math import *
 from fractions import gcd
 from itertools import product
+from copy import deepcopy
 
 
 class Bicycle(object):
@@ -66,6 +65,12 @@ class Bicycle(object):
         # Remove final new line
         return s[:-1]
 
+    def copy(self):
+        """
+        Return a copy of this Bicycle.
+        """
+        return deepcopy(self)
+
 
 class Wheel(object):
     """
@@ -117,6 +122,13 @@ class Wheel(object):
             s += '{!s} = {!s}\n'.format(k, v)
         # Remove final new line
         return s[:-1]
+
+    def copy(self):
+        """
+        Return a copy of this Wheel.
+        """
+        return deepcopy(self)
+
 
 def check_attrs(obj, *attrs):
     for attr in attrs:
