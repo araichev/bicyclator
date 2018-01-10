@@ -17,16 +17,16 @@ class Bicycle(object):
     Attributes:
 
     - name
-    - front_cogs: list of integers representing the number of teeth on 
+    - front_cogs: list of integers representing the number of teeth on
       the cogs, e.g. ``front_cogs = [28, 42]``
-    - rear_cogs: list of integers representing the number of teeth on 
+    - rear_cogs: list of integers representing the number of teeth on
       the cogs, e.g. ``rear_cogs = [10, 15, 20, 25, 30]``
     - head_tube_angle
     - fork_rake
     - front_wheel: a Wheel instance
     - rear_wheel: a Wheel instance
     """
-    def __init__(self, name=None, head_tube_angle=None, 
+    def __init__(self, name=None, head_tube_angle=None,
       fork_rake=None, crank_length=None,
       front_cogs=None, rear_cogs=None,
       front_wheel=None, rear_wheel=None):
@@ -55,7 +55,7 @@ class Bicycle(object):
             s = 'Nameless bicycle\n'
             s += '================\n'
         for k in ['front_cogs', 'rear_cogs', 'crank_length',
-          'head_tube_angle', 'fork_rake', 
+          'head_tube_angle', 'fork_rake',
           'front_wheel', 'rear_wheel']:
             v = getattr(self, k)
             if 'wheel' in k:
@@ -80,20 +80,20 @@ class Wheel(object):
 
     - name
     - bsd: bead seat diameter, e.g. 684 for a 650b rim
-    - erd: effective rim diameter, e.g. 650 for a 650b rim 
+    - erd: effective rim diameter, e.g. 650 for a 650b rim
     - tire_width
     - diameter: diameter of the wheel with the tire on and inflated
     - center_to_flange: dictionary of the form ``{'left': 37.1, 'right': 20.9}``
     - flange_diameter: dictionary of the form ``{'left': 45, 'right': 45}``
     - spoke_hole_diameter
     - num_spokes
-    - num_crosses: number of crosses in spoke pattern, e.g. 3 
+    - num_crosses: number of crosses in spoke pattern, e.g. 3
     - offset: for off-center rims
     """
-    def __init__(self, name=None, bsd=None, erd=None, 
+    def __init__(self, name=None, bsd=None, erd=None,
       tire_width=None, diameter=None,
       center_to_flange=None, flange_diameter=None,
-      spoke_hole_diameter=2.6, num_spokes=None, num_crosses=3, 
+      spoke_hole_diameter=2.6, num_spokes=None, num_crosses=3,
       offset=0):
         self.name = name
         self.erd = erd
@@ -102,10 +102,10 @@ class Wheel(object):
         self.diameter = diameter
         if center_to_flange is None:
             center_to_flange = {'left': None, 'right':None}
-        self.center_to_flange = center_to_flange  
+        self.center_to_flange = center_to_flange
         if flange_diameter is None:
             flange_diameter = {'left': None, 'right':None}
-        self.flange_diameter = flange_diameter  
+        self.flange_diameter = flange_diameter
         self.spoke_hole_diameter = spoke_hole_diameter
         self.num_spokes = num_spokes
         self.num_crosses = num_crosses
@@ -141,14 +141,14 @@ def derailer_capacity(bicycle):
     """
     Return the derailer capacity needed to accommodate the cog set
     on the given Bicycle object.
-    
+
     Assume the following bicycle attributes are non-null and non-empty:
 
     - front_cogs
     - rear_cogs
 
     Raise a ``ValueError``, if that is not the case.
-    
+
     EXAMPLES::
 
         >>> b = Bicycle(front_cogs=[26, 36], rear_cogs=[12, 18, 32])
@@ -166,7 +166,7 @@ def derailer_capacity(bicycle):
 def num_skid_patches(bicycle, ambidextrous=False):
     """
     Return a dictionary of the form (front cog, rear cog) ->
-    number of skid patches made on the rear tire of a fixed gear 
+    number of skid patches made on the rear tire of a fixed gear
     bicycle with the given front cog and rear cog.
 
     Assume the following bicycle attributes are non-null and non-empty:
@@ -187,7 +187,7 @@ def num_skid_patches(bicycle, ambidextrous=False):
     SKID PATCH THEOREM:
 
     Let a/b be the ratio of the number of teeth on the front cog to the
-    number of teeth on the rear cog written in lowest terms. 
+    number of teeth on the rear cog written in lowest terms.
     Then
 
     1. For single-sided skidding, there are b skid patches.
@@ -208,7 +208,7 @@ def num_skid_patches(bicycle, ambidextrous=False):
         b = r/g
         if ambidextrous and (a % 2) != 0:
             result[(f, r)] =  2*b
-        else: 
+        else:
             result[(f, r)] = b
     return result
 
@@ -284,7 +284,7 @@ def gain_ratios(bicycle, digits=None):
 
 def cadence_to_speeds(bicycle, cadence, digits=None):
     """
-    Return speeds in kilometers per hour. 
+    Return speeds in kilometers per hour.
     Cadence is measured in hertz (revolutions/second).
 
     Assume the following bicycle attributes are non-null and non-empty:
@@ -321,7 +321,7 @@ def cadence_to_speeds(bicycle, cadence, digits=None):
 
 def speed_to_cadences(bicycle, speed, digits=None):
     """
-    Return cadences in hertz (revolutions per second). 
+    Return cadences in hertz (revolutions per second).
     Speed is measured in kilometers per hour.
 
     Assume the following bicycle attributes are non-null and non-empty:
@@ -356,11 +356,11 @@ def speed_to_cadences(bicycle, speed, digits=None):
 
     return result
 
-def trail(bicycle, digits=None): 
+def trail(bicycle, digits=None):
     """
-    Return the tuple (trail, mechanical trail, wheel flop) 
+    Return the tuple (trail, mechanical trail, wheel flop)
     for a bicycle with the given parameters.
-    
+
     Assume the following bicycle attributes are non-null and non-empty:
 
     - head_tube_angle
@@ -449,7 +449,7 @@ def spoke_length(wheel, digits=None):
 
 def approx_diameter(wheel):
     """
-    Return the approximate diameter of the given wheel, 
+    Return the approximate diameter of the given wheel,
     which is the bead seat diameter plus twice the tire width.
 
     Assume the following wheel attributes are non-null and non-empty:
@@ -471,5 +471,3 @@ def approx_diameter(wheel):
     check_attrs(w, *attrs)
 
     return w.bsd + 2*w.tire_width
-
-

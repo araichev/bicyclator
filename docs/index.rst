@@ -9,7 +9,7 @@ Bicyclator |release| Documentation
 .. toctree::
    :maxdepth: 2
 
-   bicyclator
+   api
 
 
 Indices and tables
