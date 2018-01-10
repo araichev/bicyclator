@@ -4,6 +4,9 @@ Bicyclator
 .. image:: http://mybinder.org/badge.svg
     :target: http://mybinder.org:/repo/araichev/bicyclator
 
+.. image:: https://travis-ci.org/araichev/bicyclator.svg?branch=master
+    :target: https://travis-ci.org/araichev/bicyclator
+
 A tiny Python 3.4+ library for calculating bicycle-related quantities such as gain ratio, trail, and spoke length.
 
 
